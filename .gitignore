@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+.next/
+.turbo/
+
+# Graphify
+graphify-out/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+blockchains/*/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Docs (tracked separately or in fe/ repo)
+docs/
+
+# Frontend (has its own git repo)
+fe/

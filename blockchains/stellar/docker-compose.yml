@@ -1,0 +1,16 @@
+services:
+  stellar-local:
+    image: stellar/quickstart:testing
+    container_name: stellar-local
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - NETWORK=local
+    volumes:
+      - stellar-local-data:/var/lib/stellar
+    restart: "no"
+    command: --standalone --enable-soroban-rpc
+
+volumes:
+  stellar-local-data:

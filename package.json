@@ -1,0 +1,8 @@
+{
+  "name": "stellar-solana-escrow",
+  "private": true,
+  "scripts": {
+    "chain:stellar": "bash blockchains/stellar/scripts/start-network.sh",
+    "chain:stellar:stop": "bash blockchains/stellar/scripts/stop-network.sh"
+  }
+}
