@@ -3,7 +3,7 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 06-4 / 06-5 (parallel, next)
+**Active slice:** 06-4 (next)
 **Last updated:** 2026-09-04
 
 ## Slice Progress
@@ -14,7 +14,7 @@
 | 06-2 | ✅ Done | Escrow account struct — state.rs with EscrowAccount, EscrowStatus, PDA seeds |
 | 06-3 | ✅ Done | Create instruction — PDA init + SPL transfer + DepositedEvent |
 | 06-4 | Pending | Release instruction |
-| 06-5 | Pending | Refund instruction |
+| 06-5 | ✅ Done | Refund instruction — PDA-signed CPI transfer back to depositor + RefundedEvent |
 | 06-6 | Pending | Tests + test SPL mint |
 | 06-7 | Pending | Deploy + IDL export + frontend types |
 
@@ -51,11 +51,24 @@
 - `EscrowError::InvalidAmount` error code
 - `lib.rs` updated: `pub use instructions::create::*; pub use state::*;`, create_escrow in #[program]
 - Cargo.toml: `idl-build` feature enables both `anchor-lang/idl-build` and `anchor-spl/idl-build`
-- `anchor build` compiles cleanly (no warnings, no errors)
+- `anchor build` compiles cleanly
+
+### SLICE-06-5: Refund instruction
+
+- `blockchains/solana/programs/escrow/src/instructions/refund.rs` — new
+- `RefundEscrow` accounts struct: signer (depositor), escrow_pda (seeds verified, constraint depositor==signer), mint, escrow_ata, depositor_ata, token_program
+- `refund_escrow` instruction: validates status==Created, validates signer==depositor, CPI token::transfer from escrow ATA to depositor ATA (PDA signs via signer_seeds), sets status to Refunded, emits RefundedEvent
+- `RefundedEvent` with #[event] derive
+- `RefundError::NotCreated`, `RefundError::NotDepositor` error codes
+- `instructions/mod.rs` updated: added `pub mod refund;`
+- `lib.rs` updated: `pub use instructions::refund::*;`, refund_escrow in #[program]
+- PDA seeds verified via Anchor `seeds` constraint using escrow_pda account fields
+- Borrow fix: immutable borrow for validation/CPI, then mutable borrow for status update
+- `anchor build` compiles cleanly
 
 ## What's next
 
-SLICE-06-4 (Release instruction) and SLICE-06-5 (Refund instruction) — parallel, both depend on 06-3.
+SLICE-06-4 (Release instruction) — transfer tokens to beneficiary, then SLICE-06-6 (Tests).
 
 ## Open questions
 

@@ -21,3 +21,5 @@
 | D15 | 2026-09-04 | pub use glob re-export for Anchor macro | #[program] macro generates code referencing crate::__client_accounts_* — glob re-export brings these to crate root |
 | D16 | 2026-09-04 | idl-build feature enables anchor-spl/idl-build | Anchor 0.31 IDL generation requires idl-build on both anchor-lang AND anchor-spl — program feature propagates |
 | D17 | 2026-09-04 | escrow_ata uses init not init_if_needed | New escrow always creates new ATA — init_if_needed requires cargo feature and is unnecessary here |
+| D18 | 2026-09-04 | Refund uses constraint not has_one for depositor check | has_one requires matching field name in Accounts struct — constraint is more flexible when account field name differs (signer vs depositor) |
+| D19 | 2026-09-04 | Refund: immutable borrow for CPI, then mutable for status | Rust borrow checker E0502: can't borrow escrow_pda as mutable and immutable simultaneously — split into two phases |
