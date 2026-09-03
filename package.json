@@ -5,6 +5,8 @@
     "chain:stellar": "bash blockchains/stellar/scripts/start-network.sh",
     "chain:stellar:stop": "bash blockchains/stellar/scripts/stop-network.sh",
     "chain:stellar:faucet": "npx tsx blockchains/stellar/scripts/faucet.ts",
+    "chain:solana": "bash blockchains/solana/scripts/start-validator.sh",
+    "chain:solana:stop": "bash blockchains/solana/scripts/stop-validator.sh",
     "chain:health": "npx tsx blockchains/scripts/health-check.ts"
   },
   "dependencies": {

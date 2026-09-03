@@ -3,14 +3,14 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 05-1 (next)
+**Active slice:** 05-2 (next)
 **Last updated:** 2026-09-03
 
 ## Slice Progress
 
 | Slice | Status | Notes |
 |-------|--------|-------|
-| 05-1 | Pending | Solana local validator scripts |
+| 05-1 | ✅ Done | Solana local validator scripts — start/stop, RPC poll, idempotent |
 | 05-2 | Pending | Solana faucet + keypairs |
 | 05-3 | ✅ Done | Stellar local network (Docker) — tested start/stop/RPC/friendbot |
 | 05-4 | ✅ Done | Stellar faucet + keypairs — 4 roles funded, idempotent |
@@ -19,6 +19,16 @@
 | 05-7 | ✅ Done | Local dev workflow doc — blockchains/README.md |
 
 ## What's done
+
+### SLICE-05-1: Solana local validator scripts
+
+- `blockchains/solana/scripts/start-validator.sh` — new (solana CLI check, kill existing, start with --reset, RPC poll 15s)
+- `blockchains/solana/scripts/stop-validator.sh` — new (kill by port, pkill fallback)
+- `blockchains/solana/.gitignore` — new (.logs/ + .local-keys/)
+- `package.json` — updated (added chain:solana + chain:solana:stop scripts)
+- `blockchains/scripts/health-check.ts` — fixed Solana getHealth response parsing (result is string "ok", not {status: "ok"})
+- Solana CLI v4.2.2 (Agave) installed from anza.xyz release channel
+- Tested: start → RPC ready in 2s, re-run → kills existing + restarts, stop → clean shutdown, health check → ✓
 
 ### SLICE-05-3: Stellar local network (Docker)
 
@@ -51,7 +61,7 @@
 - Colored output: ✓ green / ✗ red, with response time and detail
 - Exit code 0 if all checked networks healthy, 1 if any down
 - 5s timeout per network via AbortController
-- Tested: both down → exit 1, Stellar up + `--stellar` → exit 0, `--all` with Solana down → exit 1
+- Tested: both down → exit 1, Stellar up + `--stellar` → exit 0, Solana up + `--solana` → exit 0, `--all` mixed → exit 1
 
 ### SLICE-05-6: RPC config + env integration
 
@@ -72,10 +82,9 @@
 
 ## What's next
 
-SLICE-05-1 (Solana local validator) — parallel track, can be done independently.
-SLICE-05-2 (Solana faucet + keypairs) — depends on 05-1.
+SLICE-05-2 (Solana faucet + keypairs) — depends on 05-1, ready to start.
 
-All other slices done. EPIC-05 remaining: 05-1 + 05-2 (Solana track).
+All other slices done. EPIC-05 remaining: 05-2 only.
 
 ## Open questions
 

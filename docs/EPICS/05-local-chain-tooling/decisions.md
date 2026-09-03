@@ -22,3 +22,5 @@
 | D16 | 2026-09-03 | faucetUrl optional on ChainConfig | Only Stellar has a faucet endpoint; Solana faucet is CLI-based |
 | D17 | 2026-09-03 | keysDir in env.ts with fallback to chains.ts defaults | Env override → chains.ts → hardcoded fallback; same pattern as rpcUrls |
 | D18 | 2026-09-03 | README marks EPIC-06/07 as "coming soon" | Avoid broken links to non-existent contract deployment docs |
+| D19 | 2026-09-03 | Solana CLI from anza.xyz (Agave fork) | Official solana.com SSL failed; anza.xyz is the Agave/Solana 4.x release channel |
+| D20 | 2026-09-03 | Solana getHealth returns result as string | Fixed health-check: `data.result === "ok"` not `data.result.status === "ok"` — Solana JSON-RPC returns bare string |

@@ -36,7 +36,7 @@ async function checkSolana(): Promise<CheckResult> {
     const elapsed = Date.now() - start;
     if (resp.ok) {
       const data = await resp.json();
-      if (data.result?.status === "ok") {
+      if (data.result === "ok" || data.result?.status === "ok") {
         return { name: "Solana", endpoint: SOLANA_RPC, healthy: true, responseTime: elapsed, detail: "ok" };
       }
       return { name: "Solana", endpoint: SOLANA_RPC, healthy: false, responseTime: elapsed, detail: `unexpected response: ${JSON.stringify(data)}` };
