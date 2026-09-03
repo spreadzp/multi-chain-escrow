@@ -16,7 +16,7 @@
 | 05-4 | ✅ Done | Stellar faucet + keypairs — 4 roles funded, idempotent |
 | 05-5 | ✅ Done | Health-check both networks — --solana/--stellar/--all flags, colored output |
 | 05-6 | ✅ Done | RPC config + env integration — chains.ts, env.ts, .env.local, .env.example updated |
-| 05-7 | Pending | Local dev workflow doc |
+| 05-7 | ✅ Done | Local dev workflow doc — blockchains/README.md |
 
 ## What's done
 
@@ -63,10 +63,19 @@
 - `npm run build` passes in fe/
 - All 236 tests pass
 
+### SLICE-05-7: Local dev workflow doc
+
+- `blockchains/README.md` — new (prerequisites, quick start, full workflow, troubleshooting, key files, env vars, network endpoints)
+- Covers both Solana and Stellar (Solana sections marked as "coming with EPIC-05-1/05-2")
+- EPIC-06/07 contract deployment marked as "coming soon"
+- All referenced file paths verified correct
+
 ## What's next
 
 SLICE-05-1 (Solana local validator) — parallel track, can be done independently.
-SLICE-05-7 (Local dev workflow doc) — final slice, documents the full local dev workflow.
+SLICE-05-2 (Solana faucet + keypairs) — depends on 05-1.
+
+All other slices done. EPIC-05 remaining: 05-1 + 05-2 (Solana track).
 
 ## Open questions
 
