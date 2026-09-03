@@ -24,3 +24,5 @@
 | D18 | 2026-09-03 | README marks EPIC-06/07 as "coming soon" | Avoid broken links to non-existent contract deployment docs |
 | D19 | 2026-09-03 | Solana CLI from anza.xyz (Agave fork) | Official solana.com SSL failed; anza.xyz is the Agave/Solana 4.x release channel |
 | D20 | 2026-09-03 | Solana getHealth returns result as string | Fixed health-check: `data.result === "ok"` not `data.result.status === "ok"` — Solana JSON-RPC returns bare string |
+| D21 | 2026-09-03 | Solana faucet uses solana-keygen CLI for keypair gen | Keypair files compatible with Solana CLI tooling (solana deploy, etc); @solana/web3.js keypair not needed at this stage |
+| D22 | 2026-09-03 | Solana keypair file includes both raw array + metadata | solana-keygen writes raw 64-byte array; faucet.ts rewrites with {role, publicKey, secretKey} for readability while preserving raw array in secretKey |

@@ -2,8 +2,8 @@
 
 ## Status
 
-**Phase:** In Progress
-**Active slice:** 05-2 (next)
+**Phase:** Complete
+**Active slice:** None
 **Last updated:** 2026-09-03
 
 ## Slice Progress
@@ -11,7 +11,7 @@
 | Slice | Status | Notes |
 |-------|--------|-------|
 | 05-1 | ✅ Done | Solana local validator scripts — start/stop, RPC poll, idempotent |
-| 05-2 | Pending | Solana faucet + keypairs |
+| 05-2 | ✅ Done | Solana faucet + keypairs — 4 roles, 10 SOL each, idempotent |
 | 05-3 | ✅ Done | Stellar local network (Docker) — tested start/stop/RPC/friendbot |
 | 05-4 | ✅ Done | Stellar faucet + keypairs — 4 roles funded, idempotent |
 | 05-5 | ✅ Done | Health-check both networks — --solana/--stellar/--all flags, colored output |
@@ -29,6 +29,15 @@
 - `blockchains/scripts/health-check.ts` — fixed Solana getHealth response parsing (result is string "ok", not {status: "ok"})
 - Solana CLI v4.2.2 (Agave) installed from anza.xyz release channel
 - Tested: start → RPC ready in 2s, re-run → kills existing + restarts, stop → clean shutdown, health check → ✓
+
+### SLICE-05-2: Solana faucet + keypairs
+
+- `blockchains/solana/scripts/faucet.ts` — new (keypair gen via solana-keygen, airdrop via solana CLI)
+- `package.json` — updated (added chain:solana:faucet script)
+- Roles: deployer, depositor, beneficiary, resolver — each funded with 10 SOL
+- Idempotent: loads existing keypairs from `.local-keys/{role}.json`, skips already-funded accounts
+- Keypair files compatible with Solana CLI (JSON array format + structured metadata)
+- Tested: `npm run chain:solana:faucet` → 4 keypairs created + airdropped, re-run → all loaded + skipped
 
 ### SLICE-05-3: Stellar local network (Docker)
 
@@ -76,15 +85,13 @@
 ### SLICE-05-7: Local dev workflow doc
 
 - `blockchains/README.md` — new (prerequisites, quick start, full workflow, troubleshooting, key files, env vars, network endpoints)
-- Covers both Solana and Stellar (Solana sections marked as "coming with EPIC-05-1/05-2")
+- Covers both Solana and Stellar
 - EPIC-06/07 contract deployment marked as "coming soon"
 - All referenced file paths verified correct
 
-## What's next
+## EPIC-05 Complete
 
-SLICE-05-2 (Solana faucet + keypairs) — depends on 05-1, ready to start.
-
-All other slices done. EPIC-05 remaining: 05-2 only.
+All 7 slices done. Local chain tooling fully operational for both Solana and Stellar.
 
 ## Open questions
 
