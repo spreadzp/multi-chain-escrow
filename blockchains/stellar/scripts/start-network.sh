@@ -31,7 +31,7 @@ for i in $(seq 1 30); do
     CONTAINER_ID=$(docker compose -f "$COMPOSE_FILE" ps -q stellar-local 2>/dev/null || echo "")
     echo "Container ID: ${CONTAINER_ID:-unknown}"
     echo "RPC:    http://localhost:8000"
-    echo "Friendbot: http://localhost:8001"
+    echo "Friendbot: http://localhost:8002"
     exit 0
   fi
   sleep 1

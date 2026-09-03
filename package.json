@@ -3,6 +3,13 @@
   "private": true,
   "scripts": {
     "chain:stellar": "bash blockchains/stellar/scripts/start-network.sh",
-    "chain:stellar:stop": "bash blockchains/stellar/scripts/stop-network.sh"
+    "chain:stellar:stop": "bash blockchains/stellar/scripts/stop-network.sh",
+    "chain:stellar:faucet": "npx tsx blockchains/stellar/scripts/faucet.ts"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^17.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1"
   }
 }
