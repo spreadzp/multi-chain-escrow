@@ -18,3 +18,6 @@
 | D12 | 2026-09-03 | Anchor.toml wallet path = .local-keys/deployer.json | Relative to blockchains/solana/ — matches 05-2 faucet output |
 | D13 | 2026-09-03 | Separate package.json for Solana workspace | Anchor tests need @coral-xyz/anchor, mocha, chai — separate from root package.json |
 | D14 | 2026-09-03 | pda_seeds/signer_seeds take byte refs not u64 | Rust lifetime E0515: to_le_bytes() creates temporary — caller owns the bytes |
+| D15 | 2026-09-04 | pub use glob re-export for Anchor macro | #[program] macro generates code referencing crate::__client_accounts_* — glob re-export brings these to crate root |
+| D16 | 2026-09-04 | idl-build feature enables anchor-spl/idl-build | Anchor 0.31 IDL generation requires idl-build on both anchor-lang AND anchor-spl — program feature propagates |
+| D17 | 2026-09-04 | escrow_ata uses init not init_if_needed | New escrow always creates new ATA — init_if_needed requires cargo feature and is unnecessary here |

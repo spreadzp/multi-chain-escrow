@@ -1,6 +1,10 @@
 use anchor_lang::prelude::*;
 
+pub mod instructions;
 pub mod state;
+
+pub use instructions::create::*;
+pub use state::*;
 
 declare_id!("BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj");
 
@@ -8,8 +12,13 @@ declare_id!("BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj");
 pub mod escrow {
     use super::*;
 
-    // Instructions will be added in subsequent slices:
-    // - create_escrow (06-3)
-    // - release_escrow (06-4)
-    // - refund_escrow (06-5)
+    pub fn create_escrow(
+        ctx: Context<CreateEscrow>,
+        beneficiary: Pubkey,
+        resolver: Pubkey,
+        amount: u64,
+        nonce: u64,
+    ) -> Result<()> {
+        instructions::create::create_escrow(ctx, beneficiary, resolver, amount, nonce)
+    }
 }

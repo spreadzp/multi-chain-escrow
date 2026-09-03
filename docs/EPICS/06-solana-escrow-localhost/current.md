@@ -3,8 +3,8 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 06-3 (next)
-**Last updated:** 2026-09-03
+**Active slice:** 06-4 / 06-5 (parallel, next)
+**Last updated:** 2026-09-04
 
 ## Slice Progress
 
@@ -12,7 +12,7 @@
 |-------|--------|-------|
 | 06-1 | ✅ Done | Anchor project setup — workspace, Cargo.toml, lib.rs scaffold, anchor build passes |
 | 06-2 | ✅ Done | Escrow account struct — state.rs with EscrowAccount, EscrowStatus, PDA seeds |
-| 06-3 | Pending | Create instruction (PDA + SPL deposit) |
+| 06-3 | ✅ Done | Create instruction — PDA init + SPL transfer + DepositedEvent |
 | 06-4 | Pending | Release instruction |
 | 06-5 | Pending | Refund instruction |
 | 06-6 | Pending | Tests + test SPL mint |
@@ -29,25 +29,33 @@
 - `blockchains/solana/tests/escrow.ts` — new (placeholder test, connects to local validator)
 - `blockchains/solana/package.json` — new (anchor test deps: @coral-xyz/anchor, mocha, chai, ts-mocha)
 - `blockchains/solana/tsconfig.json` — new (test TypeScript config)
-- `blockchains/solana/target/deploy/escrow-keypair.json` — program keypair (generated)
 - Program ID: `BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj`
-- `anchor build` compiles successfully (24s)
-- Anchor 0.31.1, Rust 1.95.0, Solana CLI 4.2.2 (Agave)
+- `anchor build` compiles successfully
 
 ### SLICE-06-2: Escrow account struct
 
 - `blockchains/solana/programs/escrow/src/state.rs` — new
 - `EscrowAccount` struct with fields: depositor, beneficiary, resolver, mint, amount, status, nonce, bump, created_at, tx_hash_deposit
-- `EscrowStatus` enum: Created, Released, Refunded (with AnchorSerialize/Deserialize, Clone, Copy, PartialEq, InitSpace)
-- `SEED_PREFIX = b"escrow"` constant
-- `pda_seeds()` and `signer_seeds()` helper methods (take byte references to avoid lifetime issues)
-- `#[derive(InitSpace)]` on both struct and enum for automatic space calculation
-- `lib.rs` updated with `pub mod state;`
+- `EscrowStatus` enum: Created, Released, Refunded
+- `SEED_PREFIX = b"escrow"`, `pda_seeds()` and `signer_seeds()` helpers
+- `#[derive(InitSpace)]` for automatic space calculation
 - `anchor build` compiles successfully
+
+### SLICE-06-3: Create instruction (PDA + SPL deposit)
+
+- `blockchains/solana/programs/escrow/src/instructions/create.rs` — new
+- `blockchains/solana/programs/escrow/src/instructions/mod.rs` — new
+- `CreateEscrow` accounts struct: depositor (signer), mint, depositor_ata, escrow_pda (init), escrow_ata (init), token_program, associated_token_program, system_program, rent
+- `create_escrow` instruction: validates amount > 0, inits PDA with all fields, CPI token::transfer from depositor ATA to escrow ATA, emits DepositedEvent
+- `DepositedEvent` with #[event] derive
+- `EscrowError::InvalidAmount` error code
+- `lib.rs` updated: `pub use instructions::create::*; pub use state::*;`, create_escrow in #[program]
+- Cargo.toml: `idl-build` feature enables both `anchor-lang/idl-build` and `anchor-spl/idl-build`
+- `anchor build` compiles cleanly (no warnings, no errors)
 
 ## What's next
 
-SLICE-06-3 (Create instruction) — PDA init + SPL token deposit in a single instruction.
+SLICE-06-4 (Release instruction) and SLICE-06-5 (Refund instruction) — parallel, both depend on 06-3.
 
 ## Open questions
 
