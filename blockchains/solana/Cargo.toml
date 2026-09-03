@@ -1,0 +1,14 @@
+[workspace]
+members = ["programs/escrow"]
+resolver = "2"
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+[profile.release.package.anchor-syn]
+opt-level = 0
+[profile.release.package.anchor-lang]
+opt-level = 0
+[profile.release.package.anchor-lang-codegen]
+opt-level = 0

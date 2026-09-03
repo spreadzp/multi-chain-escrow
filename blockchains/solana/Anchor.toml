@@ -1,0 +1,25 @@
+[toolchain]
+anchor_version = "0.31.1"
+
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+escrow = "BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj"
+
+[registry]
+url = "https://api.devnet.solana.com"
+
+[provider]
+cluster = "localnet"
+wallet = ".local-keys/deployer.json"
+
+[scripts]
+test = "npx ts-mocha -t 1000000 tests/**/*.ts"
+
+[test]
+startup_wait = 5000
+shutdown_wait = 2000
+
+[test.validator]

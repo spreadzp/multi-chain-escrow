@@ -1,2 +1,4 @@
 .logs/
 .local-keys/
+target/
+node_modules/
