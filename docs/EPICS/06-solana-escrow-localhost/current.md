@@ -3,7 +3,7 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 06-2 (next)
+**Active slice:** 06-3 (next)
 **Last updated:** 2026-09-03
 
 ## Slice Progress
@@ -11,7 +11,7 @@
 | Slice | Status | Notes |
 |-------|--------|-------|
 | 06-1 | ✅ Done | Anchor project setup — workspace, Cargo.toml, lib.rs scaffold, anchor build passes |
-| 06-2 | Pending | Escrow account struct |
+| 06-2 | ✅ Done | Escrow account struct — state.rs with EscrowAccount, EscrowStatus, PDA seeds |
 | 06-3 | Pending | Create instruction (PDA + SPL deposit) |
 | 06-4 | Pending | Release instruction |
 | 06-5 | Pending | Refund instruction |
@@ -34,10 +34,20 @@
 - `anchor build` compiles successfully (24s)
 - Anchor 0.31.1, Rust 1.95.0, Solana CLI 4.2.2 (Agave)
 
+### SLICE-06-2: Escrow account struct
+
+- `blockchains/solana/programs/escrow/src/state.rs` — new
+- `EscrowAccount` struct with fields: depositor, beneficiary, resolver, mint, amount, status, nonce, bump, created_at, tx_hash_deposit
+- `EscrowStatus` enum: Created, Released, Refunded (with AnchorSerialize/Deserialize, Clone, Copy, PartialEq, InitSpace)
+- `SEED_PREFIX = b"escrow"` constant
+- `pda_seeds()` and `signer_seeds()` helper methods (take byte references to avoid lifetime issues)
+- `#[derive(InitSpace)]` on both struct and enum for automatic space calculation
+- `lib.rs` updated with `pub mod state;`
+- `anchor build` compiles successfully
+
 ## What's next
 
-SLICE-06-2 (Escrow account struct) — define Escrow account with fields:
-depositor, beneficiary, resolver, mint, amount, nonce, status (created/released/refunded).
+SLICE-06-3 (Create instruction) — PDA init + SPL token deposit in a single instruction.
 
 ## Open questions
 

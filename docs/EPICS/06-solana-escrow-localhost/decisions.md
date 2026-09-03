@@ -17,3 +17,4 @@
 | D11 | 2026-09-03 | Program ID generated via solana-keygen | BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj — keypair in target/deploy/ |
 | D12 | 2026-09-03 | Anchor.toml wallet path = .local-keys/deployer.json | Relative to blockchains/solana/ — matches 05-2 faucet output |
 | D13 | 2026-09-03 | Separate package.json for Solana workspace | Anchor tests need @coral-xyz/anchor, mocha, chai — separate from root package.json |
+| D14 | 2026-09-03 | pda_seeds/signer_seeds take byte refs not u64 | Rust lifetime E0515: to_le_bytes() creates temporary — caller owns the bytes |
