@@ -15,7 +15,7 @@
 | 08-3 | ✅ Done | releaseEscrow + refundEscrow — instruction builders, mint fetch, 8 tests pass |
 | 08-4 | ✅ Done | getEscrow + listEscrowsByUser — account mapping, memcmp filter, 9 tests pass |
 | 08-5 | ✅ Done | subscribeEvents — log parsing, event discriminators, 12 tests pass |
-| 08-6 | Pending | Integration tests on local validator |
+| 08-6 | ✅ Done | Integration tests on local validator — 8 tests pass |
 
 ## What's done
 
@@ -63,9 +63,15 @@
 - `fe/src/adapters/solana/__tests__/events.test.ts` — 12 tests
 - `npm run build` passes, `vitest` 48/48 pass
 
-## What's next
+### SLICE-08-6: Integration tests
+- `fe/src/adapters/solana/__tests__/integration.test.ts` — 8 end-to-end tests on local validator
+- Tests: create escrow with real PDA + token transfer, getEscrow reads on-chain account, listEscrowsByUser with memcmp filter, release escrow (tokens to beneficiary), refund escrow (tokens back to depositor), event parsing from tx logs, subscribeEvents cleanup
+- Fixes: `signTransaction` wallet method, `setKeypair` for real signers, `escrowAccount` camelCase for coder
+- `npm run build` passes, `vitest` 56/56 pass (48 unit + 8 integration)
 
-SLICE-08-6 (Integration tests) — end-to-end tests on local validator.
+## EPIC-08 Complete ✅
+
+All slices (08-1 through 08-6) implemented. SolanaEscrowAdapter fully implements EscrowAdapter interface.
 
 ## Open questions
 

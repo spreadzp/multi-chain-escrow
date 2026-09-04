@@ -26,3 +26,9 @@
 | D20 | 2026-09-04 | `fetchEscrowAccount` returns null on error | Graceful handling for non-existent accounts; catch block returns null |
 | D21 | 2026-09-04 | Event discriminators via `sha256("event:<EventName>")[0:8]` | Anchor convention for `#[event]` struct discriminators |
 | D22 | 2026-09-04 | `connection.onLogs` for event subscription | Real-time log monitoring with "confirmed" commitment; parse "Program data:" entries |
+| D23 | 2026-09-04 | `setKeypair` method for integration tests | Allows passing real signer keypair; `getProgram` uses it instead of random Keypair |
+| D24 | 2026-09-04 | `escrowAccount` camelCase for Anchor coder | Anchor 0.31 uses camelCase account names in `coder.accounts.decode()` |
+| D25 | 2026-09-04 | `tx.sign(keypair)` rest params for wallet | `sign(...signers: Array<Signer>)` — pass single keypair, not array |
+| D23 | 2026-09-04 | `setKeypair` method for integration tests | Adapter needs real signer keypair for tx signing; `setWalletAddress` only sets address |
+| D24 | 2026-09-04 | `escrowAccount` camelCase for coder.decode | Anchor 0.31 uses camelCase in `program.coder.accounts.decode()`, not PascalCase from IDL |
+| D25 | 2026-09-04 | `signTransaction` casts tx to `any` | Type intersection `Signer & Signer[]` in web3.js makes typing impossible; runtime works with `tx.sign(keypair)` |
