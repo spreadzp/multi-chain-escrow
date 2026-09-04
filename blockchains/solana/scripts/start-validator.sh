@@ -34,7 +34,7 @@ pkill -f "solana-test-validator.*--rpc-port $RPC_PORT" 2>/dev/null || true
 sleep 0.5
 
 echo "Starting Solana local validator on localhost:$RPC_PORT..."
-solana-test-validator --rpc-port $RPC_PORT --reset > "$LOG_FILE" 2>&1 &
+solana-test-validator --rpc-port $RPC_PORT --reset --clone-feature-set --url https://api.mainnet-beta.solana.com > "$LOG_FILE" 2>&1 &
 VALIDATOR_PID=$!
 
 # Wait for RPC to respond (up to 15s)

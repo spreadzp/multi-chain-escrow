@@ -8,6 +8,7 @@
     "chain:solana": "bash blockchains/solana/scripts/start-validator.sh",
     "chain:solana:stop": "bash blockchains/solana/scripts/stop-validator.sh",
     "chain:solana:faucet": "npx tsx blockchains/solana/scripts/faucet.ts",
+    "chain:solana:deploy": "cd blockchains/solana && anchor deploy",
     "chain:health": "npx tsx blockchains/scripts/health-check.ts"
   },
   "dependencies": {

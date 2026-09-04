@@ -31,3 +31,6 @@
 | D25 | 2026-09-04 | Read token balance via getAccountInfo raw bytes | getTokenAccountBalance fails on empty/non-existent accounts — getAccountInfo + readBigUInt64LE(64) is more robust |
 | D26 | 2026-09-04 | Separate confirmed connection for getTransaction | Provider defaults to "processed" commitment but getTransaction requires "confirmed" — created second Connection object |
 | D27 | 2026-09-04 | Event verification via "Program data:" log prefix | Anchor events are base64-encoded in "Program data:" log lines — event name not visible as literal text |
+| D28 | 2026-09-04 | Token mint is dynamic, set at runtime by EPIC-08 | Test mint is created per test run — contracts.ts has TODO placeholder, EPIC-08 adapter will create persistent mint or set at runtime |
+| D29 | 2026-09-04 | start-validator.sh updated with --clone-feature-set | Validator script needed SBPF v2 feature gates from mainnet — without it, anchor deploy fails with "sbpf_version not enabled" |
+| D30 | 2026-09-04 | IDL committed to fe/src/config/ (not gitignored) | IDL is needed by EPIC-08 adapter — must be in git, not generated at build time |

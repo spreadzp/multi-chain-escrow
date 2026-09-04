@@ -2,8 +2,8 @@
 
 ## Status
 
-**Phase:** In Progress
-**Active slice:** 06-7 (next)
+**Phase:** Complete
+**Active slice:** None (EPIC-06 done)
 **Last updated:** 2026-09-04
 
 ## Slice Progress
@@ -16,7 +16,7 @@
 | 06-4 | ✅ Done | Release instruction — PDA-signed CPI transfer to beneficiary + ReleasedEvent |
 | 06-5 | ✅ Done | Refund instruction — PDA-signed CPI transfer back to depositor + RefundedEvent |
 | 06-6 | ✅ Done | Anchor test suite — 10 tests passing (create, release, refund, role denial, status transitions, events) |
-| 06-7 | Pending | Deploy + IDL export + frontend types |
+| 06-7 | ✅ Done | Deploy + IDL export + frontend types — program deployed, IDL copied, contracts.ts updated, build passes |
 
 ## What's done
 
@@ -61,22 +61,27 @@
 
 ### SLICE-06-6: Anchor test suite
 - `blockchains/solana/tests/escrow.ts` — comprehensive test suite (10 tests, all passing)
-- Test coverage:
-  - create_escrow: happy path (PDA, tokens, status), amount=0 rejection
-  - release_escrow: beneficiary release, resolver release, unauthorized rejection, double release rejection
-  - refund_escrow: happy path, non-depositor rejection, refund on Released rejection, release on Refunded rejection
-  - Event verification: ReleasedEvent and RefundedEvent confirmed via "Program data:" log entries
-- Test infrastructure: SPL mint creation, ATAs for all roles, helper functions (findEscrowPda, getTokenBalance, createEscrow, deriveEscrowAta)
+- Test coverage: create happy path + amount=0, release by beneficiary/resolver + unauthorized + double release, refund happy path + non-depositor + status transitions, event verification
+- Test infrastructure: SPL mint creation, ATAs for all roles, helper functions
 - Validator setup: `--clone-feature-set` from mainnet to enable SBPF v2 feature gates
+
+### SLICE-06-7: Deploy + IDL export + frontend types
+- Program deployed to local validator: `BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj`
+- `fe/src/config/solana-idl.json` — new (exported Anchor IDL, 23KB)
+- `fe/src/types/solana-escrow.ts` — new (Anchor-generated TypeScript types, 23KB)
+- `fe/src/config/contracts.ts` — updated (real program ID + resolver ID for solana-local)
+- `package.json` — updated (added `chain:solana:deploy` script)
+- `blockchains/solana/scripts/start-validator.sh` — updated (added `--clone-feature-set` for SBPF v2)
+- `anchor test` passes (10/10), `npm run build` passes in fe/
 - Graphify indexed: 132 nodes, 161 edges, 13 communities
 
 ## What's next
 
-SLICE-06-7 (Deploy + IDL export + frontend types) — deploy to local validator, copy IDL, update frontend config.
+EPIC-06 is complete. Next EPIC: EPIC-08 (Solana adapter) can use the IDL, types, and config to interact with the deployed program.
 
 ## Open questions
 
-- None
+- Token mint address is dynamic (created per test run) — EPIC-08 will need to create a persistent mint or set it at runtime
 
 ## Grill decisions
 
