@@ -16,7 +16,7 @@
 | 07-4 | ✅ Done | Release function — release_escrow with role check, SAC transfer to beneficiary, status update; 8 tests pass |
 | 07-5 | ✅ Done | Refund function — refund_escrow with depositor check, SAC transfer back, status update; 11 tests pass |
 | 07-6 | ✅ Done | Tests — comprehensive suite: 17 tests with helpers, happy paths, role denial, status transitions, events |
-| 07-7 | Pending | Deploy + ABI export + frontend types |
+| 07-7 | ✅ Done | Deploy + ABI — contract deployed to local network, TS bindings + ABI exported, configs updated |
 
 ## What's done
 
@@ -71,9 +71,19 @@
 - Multi-escrow: nonce increment test (0, 1, 2)
 - 17 tests total, all pass
 
+### SLICE-07-7: Deploy + ABI export + frontend types
+- Contract deployed to local Stellar network: `CDCJWPN3PAQB6EDDBMVBQGBEPNYXYSODHSQ3HKL6MID7MBT6GDSYTLAO`
+- WASM hash: `db5ba56c00bb2fb6b70cb544e32b92d6f41cc5acc8a956e51ba2ddf1ba68fd4d`
+- TypeScript bindings generated via `soroban contract bindings typescript` → `fe/src/types/stellar-escrow.ts`
+- ABI JSON → `fe/src/config/stellar-abi.json` (3 functions: create_escrow, release_escrow, refund_escrow)
+- `fe/src/config/contracts.ts` updated with real contract ID + deployer as resolver
+- `package.json` — added `chain:stellar:deploy` script
+- `npm run build` passes in fe/
+- Contract verified on-network via `soroban contract info interface`
+
 ## What's next
 
-SLICE-07-7 (Deploy + ABI) — deploy to local Stellar network, generate ABI, verify on-network.
+EPIC-07 is complete. All 7 slices done. Ready for EPIC-09 (Stellar adapter).
 
 ## Open questions
 

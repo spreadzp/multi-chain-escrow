@@ -5,6 +5,7 @@
     "chain:stellar": "bash blockchains/stellar/scripts/start-network.sh",
     "chain:stellar:stop": "bash blockchains/stellar/scripts/stop-network.sh",
     "chain:stellar:faucet": "npx tsx blockchains/stellar/scripts/faucet.ts",
+    "chain:stellar:deploy": "soroban contract deploy --source deployer --wasm target/wasm32v1-none/release/escrow.wasm --network local",
     "chain:solana": "bash blockchains/solana/scripts/start-validator.sh",
     "chain:solana:stop": "bash blockchains/solana/scripts/stop-validator.sh",
     "chain:solana:faucet": "npx tsx blockchains/solana/scripts/faucet.ts",

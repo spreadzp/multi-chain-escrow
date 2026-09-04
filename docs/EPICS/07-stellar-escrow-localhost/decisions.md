@@ -24,3 +24,6 @@
 | D18 | 2026-09-04 | Event verification deferred to 07-6 | SDK 28 events().all() returns empty in test context — needs investigation of diagnostic vs contract events; core functionality (storage, transfer, auth) verified |
 | D19 | 2026-09-04 | Event topics are String, not Symbol | env.events().publish(("Deposited", nonce), ...) creates String topics in XDR, not Symbol; match with String::from_str in tests |
 | D20 | 2026-09-04 | filter_by_contract doesn't match in SDK 28 RC | filter_by_contract returns empty; iterate events.events() directly and match on topic content |
+| D21 | 2026-09-04 | Deploy via `soroban contract deploy --source deployer --wasm ... --network local` | SDK 28 CLI uses `--source` not `--source-key`; identity must be added via `soroban keys add` |
+| D22 | 2026-09-04 | TypeScript bindings via `soroban contract bindings typescript` | Generates Client class with create_escrow, release_escrow, refund_escrow methods; embedded XDR spec |
+| D23 | 2026-09-04 | Contract ID: CDCJWPN3PAQB6EDDBMVBQGBEPNYXYSODHSQ3HKL6MID7MBT6GDSYTLAO | Deployed to local standalone network with deployer identity |
