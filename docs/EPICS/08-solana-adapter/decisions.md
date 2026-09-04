@@ -24,3 +24,5 @@
 | D18 | 2026-09-04 | `getMintFromEscrow` fetches mint from on-chain account | release/refund need mint for ATA derivation; fetch from escrowAccount via `program.account.escrowAccount.fetch` |
 | D19 | 2026-09-04 | Depositor at offset 8 for memcmp | 8-byte discriminator + 32-byte depositor pubkey; `getProgramAccounts` filter |
 | D20 | 2026-09-04 | `fetchEscrowAccount` returns null on error | Graceful handling for non-existent accounts; catch block returns null |
+| D21 | 2026-09-04 | Event discriminators via `sha256("event:<EventName>")[0:8]` | Anchor convention for `#[event]` struct discriminators |
+| D22 | 2026-09-04 | `connection.onLogs` for event subscription | Real-time log monitoring with "confirmed" commitment; parse "Program data:" entries |

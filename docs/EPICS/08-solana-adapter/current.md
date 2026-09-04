@@ -14,7 +14,7 @@
 | 08-2 | ✅ Done | createEscrow — PDA derivation, ATA, instruction builder; 8 tests pass |
 | 08-3 | ✅ Done | releaseEscrow + refundEscrow — instruction builders, mint fetch, 8 tests pass |
 | 08-4 | ✅ Done | getEscrow + listEscrowsByUser — account mapping, memcmp filter, 9 tests pass |
-| 08-5 | Pending | Event parsing + subscribeEvents (polling) |
+| 08-5 | ✅ Done | subscribeEvents — log parsing, event discriminators, 12 tests pass |
 | 08-6 | Pending | Integration tests on local validator |
 
 ## What's done
@@ -54,9 +54,18 @@
 - `fe/src/adapters/solana/__tests__/query.test.ts` — 9 tests
 - `npm run build` passes, `vitest` 36/36 pass
 
+### SLICE-08-5: subscribeEvents
+- `fe/src/adapters/solana/events.ts` — `parseEventFromBase64`, `parseEventsFromLogMessages`, `subscribeToEscrowEvents`
+- Event discriminators computed via `sha256("event:<EventName>")[0:8]` (Anchor convention)
+- Three event types: DepositedEvent, ReleasedEvent, RefundedEvent
+- `subscribeEvents` uses `connection.onLogs(programId, callback, "confirmed")` — returns cleanup function
+- Parses "Program data: <base64>" log entries, matches discriminator, decodes fields
+- `fe/src/adapters/solana/__tests__/events.test.ts` — 12 tests
+- `npm run build` passes, `vitest` 48/48 pass
+
 ## What's next
 
-SLICE-08-5 (subscribeEvents) — parse on-chain logs for Deposited/Released/Refunded events.
+SLICE-08-6 (Integration tests) — end-to-end tests on local validator.
 
 ## Open questions
 
