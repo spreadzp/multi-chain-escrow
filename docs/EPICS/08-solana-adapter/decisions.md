@@ -18,3 +18,6 @@
 | D12 | 2026-09-04 | IDL cast to `any` for Anchor 0.31 | Anchor's strict `Idl` type doesn't match JSON-imported IDL; standard workaround with `Program<any>` |
 | D13 | 2026-09-04 | `tx.sign` cast to bypass `Signer & Signer[]` | @solana/web3.js v1.98 has intersection type quirk; cast tx to `{ sign: (s: unknown[]) => void }` |
 | D14 | 2026-09-04 | Wallet requires `payer` field | Anchor 0.31 `Wallet` type extends `NodeWallet` which requires `payer: Keypair` |
+| D15 | 2026-09-04 | `program.methods` cast to `any` | TS2589 deep type instantiation with `Program<any>` on method calls |
+| D16 | 2026-09-04 | Nonce = `new BN(Date.now())` | Timestamp-based for uniqueness; passed as both BN (instruction arg) and BigInt (PDA seed) |
+| D17 | 2026-09-04 | `@vitest-environment node` for crypto tests | jsdom lacks Buffer/crypto globals needed by `findProgramAddressSync` and `getAssociatedTokenAddressSync` |

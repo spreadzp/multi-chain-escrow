@@ -11,7 +11,7 @@
 | Slice | Status | Notes |
 |-------|--------|-------|
 | 08-1 | ✅ Done | Scaffold + connection + wallet + IDL load; 10 tests pass |
-| 08-2 | Pending | createEscrow (single method, no separate deposit) |
+| 08-2 | ✅ Done | createEscrow — PDA derivation, ATA, instruction builder; 8 tests pass |
 | 08-3 | Pending | releaseEscrow + refundEscrow |
 | 08-4 | Pending | listEscrowsByUser + getEscrow (getProgramAccounts) |
 | 08-5 | Pending | Event parsing + subscribeEvents (polling) |
@@ -27,9 +27,19 @@
 - All methods stubbed with slice references (createEscrow→08-2, release/refund→08-3, etc.)
 - `npm run build` passes, `vitest` 10/10 pass
 
+### SLICE-08-2: createEscrow implementation
+- `fe/src/adapters/solana/create.ts` — `findEscrowPda`, `deriveEscrowAta`, `createEscrowInstruction`
+- PDA seeds: `[SEED_PREFIX, depositor, beneficiary, nonce]` (matches on-chain)
+- Nonce: `new BN(Date.now())` — timestamp-based for uniqueness
+- ATA derivation: `getAssociatedTokenAddressSync(mint, escrowPda, true)` — allowOwnerOffCurve
+- `index.ts` updated: `createEscrow` calls `createEscrowInstruction` with wallet address as depositor
+- `fe/src/adapters/solana/__tests__/create.test.ts` — 8 tests (PDA determinism, nonce uniqueness, depositor uniqueness, ATA derivation, wallet guard, seed prefix verification)
+- Tests use `// @vitest-environment node` for Buffer/crypto globals
+- `npm run build` passes, `vitest` 19/19 pass (11 scaffold + 8 create)
+
 ## What's next
 
-SLICE-08-2 (createEscrow implementation) — send create_escrow instruction with PDA derivation, token transfer.
+SLICE-08-3 (releaseEscrow + refundEscrow) — send release_escrow and refund_escrow instructions.
 
 ## Open questions
 
