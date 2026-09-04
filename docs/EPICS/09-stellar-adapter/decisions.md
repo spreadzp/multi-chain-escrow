@@ -18,3 +18,7 @@
 | D12 | 2026-09-04 | `allowHttp: true` for local RPC | Stellar SDK refuses insecure HTTP without this flag; gated by `chain.isLocal` |
 | D13 | 2026-09-04 | `setSignerSecret` for integration tests | Passes Keypair secret key for real signing; derives publicKey automatically |
 | D14 | 2026-09-04 | Wallet check before stub throw | Ensures `getWalletAddress()` fires before "Not implemented" error in scaffold |
+| D15 | 2026-09-04 | `rpc` imported as value not type | `Api.isSimulationError` is a runtime function, needs value import |
+| D16 | 2026-09-04 | `prepareTransaction` without simulated arg | SDK 13.x signature: `prepareTransaction(tx, useUpgradedAuth?)` — handles simulation internally |
+| D17 | 2026-09-04 | Extract nonce from `TransactionMeta.v3().sorobanMeta().returnValue()` | Soroban return value in meta, not in `returnValue` field of GetTransactionResponse |
+| D18 | 2026-09-04 | Sign after `prepareTransaction` | Footprint + auth added by prepare; signing must happen after |
