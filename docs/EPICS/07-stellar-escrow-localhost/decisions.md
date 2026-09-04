@@ -18,3 +18,4 @@
 | D12 | 2026-09-04 | soroban-sdk 28.0.0-rc.1 | Matches soroban-cli v28.0.0 — SDK 22 had rand_core incompatibility with ed25519-dalek |
 | D13 | 2026-09-04 | crate-type = ["cdylib", "rlib"] | rlib needed for integration tests to import the crate — cdylib alone doesn't export for tests |
 | D14 | 2026-09-04 | Integration tests in contracts/escrow/tests/ | Cargo looks for integration tests in crate's tests/ dir, not workspace root |
+| D15 | 2026-09-04 | Storage access in tests requires env.as_contract() | Soroban persistent storage is only accessible within a contract context — wrap test storage calls with env.as_contract(&contract_id, \|\| { ... }) |

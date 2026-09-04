@@ -11,7 +11,7 @@
 | Slice | Status | Notes |
 |-------|--------|-------|
 | 07-1 | ✅ Done | Soroban project setup — workspace, Cargo.toml, lib.rs scaffold, soroban contract build passes |
-| 07-2 | Pending | Escrow data structure |
+| 07-2 | ✅ Done | Escrow data structure — types.rs with EscrowData, EscrowStatus, DataKey; store/retrieve test passes |
 | 07-3 | Pending | Create function (storage + SAC transfer) |
 | 07-4 | Pending | Release function |
 | 07-5 | Pending | Refund function |
@@ -30,9 +30,17 @@
 - Soroban CLI v28.0.0 installed
 - wasm32v1-none target added via rustup
 
+### SLICE-07-2: Escrow data structure
+- `blockchains/stellar/contracts/escrow/src/types.rs` — new
+- `EscrowData` struct: depositor, beneficiary, resolver, token (Address), amount (i128), status (EscrowStatus), nonce (u64), created_at (u64)
+- `EscrowStatus` enum: Created=0, Released=1, Refunded=2 (Clone, Copy, Debug, PartialEq, Eq)
+- `DataKey` enum: Escrow(u64), Counter — for storage key scheme
+- `lib.rs` updated: `mod types` + `pub use types::{DataKey, EscrowData, EscrowStatus}`
+- Tests: store/retrieve EscrowData via persistent storage (2 tests, both pass)
+
 ## What's next
 
-SLICE-07-2 (Escrow data structure) — DataKey enum, EscrowData struct, EscrowStatus enum, storage helpers.
+SLICE-07-3 (Create function) — storage init + SAC token transfer.
 
 ## Open questions
 
