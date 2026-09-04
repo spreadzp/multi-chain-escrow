@@ -27,3 +27,7 @@
 | D21 | 2026-09-04 | DataKey encoding as `ScVal vec [Symbol, ...]` | Soroban contract enums encoded as vec with variant name + args |
 | D22 | 2026-09-04 | `getContractData` with `"persistent"` durability | Contract uses `env.storage().persistent()` for all entries |
 | D23 | 2026-09-04 | Status mapping from `scValToNative` array format | `scValToNative` returns enum as `["Created"]` array, not string |
+| D24 | 2026-09-04 | Event topics: `[Symbol(type), U64(nonce)]` | Soroban `env.events().publish(("Deposited", nonce), ...)` → topic[0]=type, topic[1]=nonce |
+| D25 | 2026-09-04 | Event value as tuple `(addr, addr, i128)` or `(addr, i128)` | Matches contract publish args; `scValToNative` returns as array |
+| D26 | 2026-09-04 | Polling via `getEvents` with `startLedger..endLedger` | 2s interval, tracks latest ledger, silently retries on error |
+| D27 | 2026-09-04 | First poll records ledger only (no historical) | Avoids flooding UI with past events on startup |

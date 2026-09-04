@@ -3,7 +3,7 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 09-4
+**Active slice:** 09-5
 **Last updated:** 2026-09-04
 
 ## Slice Progress
@@ -14,41 +14,38 @@
 | 09-2 | ✅ Done | create implementation — 6 tests pass |
 | 09-3 | ✅ Done | release + refund implementation — 7 tests pass |
 | 09-4 | ✅ Done | list + get — contract storage iteration — 11 tests pass |
-| 09-5 | Pending | Event parsing + subscribeEvents polling (1.5h) |
+| 09-5 | ✅ Done | Event parsing + subscribeEvents polling — 9 tests pass |
 | 09-6 | Pending | Integration tests on local network (2.5h) |
 
 ## What's done
 
-### SLICE-09-1: Scaffold + connection + wallet
-- `connection.ts`, `index.ts`, `scaffold.test.ts` — 12 tests
+### SLICE-09-1: Scaffold + connection + wallet — 12 tests
+### SLICE-09-2: create implementation — 6 tests
+### SLICE-09-3: release + refund implementation — 7 tests
+### SLICE-09-4: list + get — contract storage iteration — 11 tests
 
-### SLICE-09-2: create implementation
-- `create.ts` — simulate, prepare, sign, send, poll, extract nonce — 6 tests
-
-### SLICE-09-3: release + refund implementation
-- `tx.ts` (shared helper), `release.ts`, `refund.ts` — 7 tests
-
-### SLICE-09-4: list + get — contract storage iteration
-- `fe/src/adapters/stellar/query.ts` — `fetchEscrowAccount` + `listEscrowAccountsByUser`
-  - `makeEscrowKey(nonce)` — constructs `DataKey::Escrow(nonce)` as `ScVal vec [Symbol("Escrow"), U64(nonce)]`
-  - `makeCounterKey()` — constructs `DataKey::Counter` as `ScVal vec [Symbol("Counter")]`
-  - `mapEscrowData` — maps `RawEscrowData` → domain `Escrow` with status mapping (Created→created, etc.)
-  - `mapStatus` — handles both string and array status formats from `scValToNative`
-  - `fetchEscrowAccount` — reads contract storage via `getContractData`, returns `Escrow | null`
-  - `listEscrowAccountsByUser` — reads counter, iterates 0..count, filters by depositor
-- `fe/src/adapters/stellar/index.ts` — wired `getEscrow` and `listEscrowsByUser`
-- `fe/src/adapters/stellar/__tests__/query.test.ts` — 11 tests
-  - mapStatus: Created/Released/Refunded/unknown
-  - mapEscrowData: correct field mapping
-  - makeEscrowKey/makeCounterKey: construct keys
-  - fetchEscrowAccount: null on error, Escrow on success
-  - listEscrowAccountsByUser: empty on counter error, iterates + filters by depositor
-- `fe/src/adapters/stellar/__tests__/scaffold.test.ts` — removed get/list stub checks
-- `npm run build` passes, `vitest` 36/36 pass (12 scaffold + 6 create + 7 release/refund + 11 query)
+### SLICE-09-5: Event parsing + subscribeEvents polling
+- `fe/src/adapters/stellar/events.ts` — event parsing + polling subscription
+  - `parseEventFromResponse` — maps `StellarRpc.Api.EventResponse` → `EscrowEvent`
+    - Topic[0] = event type ("Deposited"/"Released"/"Refunded"), Topic[1] = nonce
+    - Value = tuple of (addresses, amount) depending on event type
+    - Maps to `EscrowEvent` with `chainId`, `escrowId`, `txHash`, `blockOrLedger`, `timestamp`, `payload`
+  - `subscribeToEscrowEvents` — polling-based subscription
+    - 2s interval, uses `getLatestLedger` to track new ledgers
+    - First poll: records current ledger (no historical fetch)
+    - Subsequent polls: fetches events via `getEvents` with contract filter
+    - Returns cleanup function that stops polling
+    - Silently ignores polling errors (retry on next interval)
+- `fe/src/adapters/stellar/index.ts` — wired `subscribeEvents`
+- `fe/src/adapters/stellar/__tests__/events.test.ts` — 9 tests
+  - parseEventFromResponse: Deposited, Released, Refunded, unknown type, chainId
+  - subscribeToEscrowEvents: returns cleanup, calls onEvent, stops after cleanup, handles errors
+- `fe/src/adapters/stellar/__tests__/scaffold.test.ts` — replaced subscribeEvents stub with cleanup function test
+- `npm run build` passes, `vitest` 45/45 pass (12+6+7+11+9)
 
 ## What's next
 
-SLICE-09-5: Event parsing + `subscribeEvents` (polling-based).
+SLICE-09-6: Integration tests on local Stellar network.
 
 ## Open questions
 
