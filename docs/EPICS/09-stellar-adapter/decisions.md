@@ -24,3 +24,6 @@
 | D18 | 2026-09-04 | Sign after `prepareTransaction` | Footprint + auth added by prepare; signing must happen after |
 | D19 | 2026-09-04 | Shared `submitContractCall` in `tx.ts` | All contract methods share simulate→prepare→sign→send→poll flow; DRY |
 | D20 | 2026-09-04 | `release_escrow` and `refund_escrow` take `(caller: Address, nonce: u64)` | Matches EPIC-07 contract ABI; caller must be beneficiary/resolver for release, depositor for refund |
+| D21 | 2026-09-04 | DataKey encoding as `ScVal vec [Symbol, ...]` | Soroban contract enums encoded as vec with variant name + args |
+| D22 | 2026-09-04 | `getContractData` with `"persistent"` durability | Contract uses `env.storage().persistent()` for all entries |
+| D23 | 2026-09-04 | Status mapping from `scValToNative` array format | `scValToNative` returns enum as `["Created"]` array, not string |
