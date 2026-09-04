@@ -15,7 +15,7 @@
 | 07-3 | ✅ Done | Create function — create_escrow with auth, SAC transfer, storage, nonce, event; 4 tests pass |
 | 07-4 | ✅ Done | Release function — release_escrow with role check, SAC transfer to beneficiary, status update; 8 tests pass |
 | 07-5 | ✅ Done | Refund function — refund_escrow with depositor check, SAC transfer back, status update; 11 tests pass |
-| 07-6 | Pending | Tests + test SAC token |
+| 07-6 | ✅ Done | Tests — comprehensive suite: 17 tests with helpers, happy paths, role denial, status transitions, events |
 | 07-7 | Pending | Deploy + ABI export + frontend types |
 
 ## What's done
@@ -61,9 +61,19 @@
 - Tests: refund happy path, unauthorized caller panic, refund after release panic (3 new tests, 11 total)
 - WASM: 3 exported functions (create_escrow, release_escrow, refund_escrow)
 
+### SLICE-07-6: Tests (Soroban test + test SAC)
+- `contracts/escrow/tests/escrow.rs` — full rewrite with helpers and comprehensive coverage
+- Test helpers: `setup_env_and_token`, `mint`, `create_escrow`, `assert_status`, `assert_balance`
+- Happy paths: create→release, create→refund, create with storage/balance verification
+- Role denial: release by non-beneficiary/non-resolver, refund by non-depositor
+- Status transitions: double release, refund after release, release after refund, double refund
+- Event verification: Deposited, Released, Refunded events parsed from XDR ContractEventBody::V0
+- Multi-escrow: nonce increment test (0, 1, 2)
+- 17 tests total, all pass
+
 ## What's next
 
-SLICE-07-6 (Tests + test SAC token) — comprehensive test suite, edge cases, event verification.
+SLICE-07-7 (Deploy + ABI) — deploy to local Stellar network, generate ABI, verify on-network.
 
 ## Open questions
 

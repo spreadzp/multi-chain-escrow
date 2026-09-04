@@ -22,3 +22,5 @@
 | D16 | 2026-09-04 | Token setup via register_stellar_asset_contract_v2 | SDK 28 API: env.register_stellar_asset_contract_v2(admin) returns StellarAssetContract with .address() and .issuer() |
 | D17 | 2026-09-04 | Mint via StellarAssetClient, not TokenClient | TokenClient has transfer/balance but not mint — StellarAssetClient::new(env, token).mint(to, amount) for SAC minting |
 | D18 | 2026-09-04 | Event verification deferred to 07-6 | SDK 28 events().all() returns empty in test context — needs investigation of diagnostic vs contract events; core functionality (storage, transfer, auth) verified |
+| D19 | 2026-09-04 | Event topics are String, not Symbol | env.events().publish(("Deposited", nonce), ...) creates String topics in XDR, not Symbol; match with String::from_str in tests |
+| D20 | 2026-09-04 | filter_by_contract doesn't match in SDK 28 RC | filter_by_contract returns empty; iterate events.events() directly and match on topic content |
