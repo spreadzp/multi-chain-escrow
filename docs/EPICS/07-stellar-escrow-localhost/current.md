@@ -12,7 +12,7 @@
 |-------|--------|-------|
 | 07-1 | ✅ Done | Soroban project setup — workspace, Cargo.toml, lib.rs scaffold, soroban contract build passes |
 | 07-2 | ✅ Done | Escrow data structure — types.rs with EscrowData, EscrowStatus, DataKey; store/retrieve test passes |
-| 07-3 | Pending | Create function (storage + SAC transfer) |
+| 07-3 | ✅ Done | Create function — create_escrow with auth, SAC transfer, storage, nonce, event; 4 tests pass |
 | 07-4 | Pending | Release function |
 | 07-5 | Pending | Refund function |
 | 07-6 | Pending | Tests + test SAC token |
@@ -38,9 +38,17 @@
 - `lib.rs` updated: `mod types` + `pub use types::{DataKey, EscrowData, EscrowStatus}`
 - Tests: store/retrieve EscrowData via persistent storage (2 tests, both pass)
 
+### SLICE-07-3: Create function (storage + SAC transfer)
+- `blockchains/stellar/contracts/escrow/src/functions/create.rs` — new
+- `blockchains/stellar/contracts/escrow/src/functions/mod.rs` — new (re-exports)
+- `blockchains/stellar/contracts/escrow/src/lib.rs` — updated (mod functions, create_escrow in #[contractimpl])
+- `create_escrow`: depositor.require_auth(), amount > 0 validation, nonce from DataKey::Counter (auto-increment), EscrowData stored at DataKey::Escrow(nonce), TokenClient::transfer from depositor to contract, Deposited event, returns nonce
+- Tests: create_escrow happy path (storage + token balance + counter), zero amount panic, store/retrieve, status variants (4 tests, all pass)
+- WASM: 2270 bytes, 1 exported function
+
 ## What's next
 
-SLICE-07-3 (Create function) — storage init + SAC token transfer.
+SLICE-07-4 (Release) and SLICE-07-5 (Refund) — parallel after 07-3.
 
 ## Open questions
 

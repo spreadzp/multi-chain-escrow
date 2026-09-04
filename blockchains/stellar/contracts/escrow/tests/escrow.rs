@@ -1,8 +1,88 @@
 #![cfg(test)]
 
-use soroban_sdk::{testutils::Address as _, Address, Env};
+use soroban_sdk::{
+    testutils::{Address as _, Events as _},
+    token::{Client as TokenClient, StellarAssetClient},
+    Address, Env,
+};
 
 use escrow::{EscrowData, EscrowStatus};
+
+fn setup_token(env: &Env, admin: &Address) -> Address {
+    env.register_stellar_asset_contract_v2(admin.clone())
+        .address()
+}
+
+fn mint_token(env: &Env, token: &Address, to: &Address, amount: i128) {
+    StellarAssetClient::new(env, token).mint(to, &amount);
+}
+
+#[test]
+fn test_create_escrow() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let token = setup_token(&env, &admin);
+
+    let depositor = Address::generate(&env);
+    let beneficiary = Address::generate(&env);
+    let resolver = Address::generate(&env);
+
+    let amount: i128 = 1_000_000;
+    mint_token(&env, &token, &depositor, amount);
+
+    let contract_id = env.register(escrow::Escrow, ());
+    let client = escrow::EscrowClient::new(&env, &contract_id);
+
+    let nonce = client.create_escrow(
+        &depositor,
+        &beneficiary,
+        &resolver,
+        &token,
+        &amount,
+    );
+
+    assert_eq!(nonce, 0);
+
+    env.as_contract(&contract_id, || {
+        let key = escrow::DataKey::Escrow(0);
+        let data: EscrowData = env.storage().persistent().get(&key).unwrap();
+
+        assert_eq!(data.depositor, depositor);
+        assert_eq!(data.beneficiary, beneficiary);
+        assert_eq!(data.resolver, resolver);
+        assert_eq!(data.token, token);
+        assert_eq!(data.amount, amount);
+        assert_eq!(data.status, EscrowStatus::Created);
+        assert_eq!(data.nonce, 0);
+
+        let counter: u64 = env.storage().persistent().get(&escrow::DataKey::Counter).unwrap();
+        assert_eq!(counter, 1);
+    });
+
+    let token_client = TokenClient::new(&env, &token);
+    assert_eq!(token_client.balance(&depositor), 0);
+    assert_eq!(token_client.balance(&contract_id), amount);
+}
+
+#[test]
+#[should_panic(expected = "amount must be positive")]
+fn test_create_escrow_zero_amount() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let token = setup_token(&env, &admin);
+    let depositor = Address::generate(&env);
+    let beneficiary = Address::generate(&env);
+    let resolver = Address::generate(&env);
+
+    let contract_id = env.register(escrow::Escrow, ());
+    let client = escrow::EscrowClient::new(&env, &contract_id);
+
+    client.create_escrow(&depositor, &beneficiary, &resolver, &token, &0);
+}
 
 #[test]
 fn test_store_and_retrieve_escrow() {

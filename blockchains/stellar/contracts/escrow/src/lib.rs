@@ -1,8 +1,9 @@
 #![no_std]
 
+mod functions;
 mod types;
 
-use soroban_sdk::{contract, contractimpl};
+use soroban_sdk::{contract, contractimpl, Address, Env};
 
 pub use types::{DataKey, EscrowData, EscrowStatus};
 
@@ -11,8 +12,14 @@ pub struct Escrow;
 
 #[contractimpl]
 impl Escrow {
-    // Functions added in later slices:
-    // - create_escrow (07-3)
-    // - release_escrow (07-4)
-    // - refund_escrow (07-5)
+    pub fn create_escrow(
+        env: Env,
+        depositor: Address,
+        beneficiary: Address,
+        resolver: Address,
+        token: Address,
+        amount: i128,
+    ) -> u64 {
+        functions::create_escrow(env, depositor, beneficiary, resolver, token, amount)
+    }
 }

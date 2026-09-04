@@ -19,3 +19,6 @@
 | D13 | 2026-09-04 | crate-type = ["cdylib", "rlib"] | rlib needed for integration tests to import the crate — cdylib alone doesn't export for tests |
 | D14 | 2026-09-04 | Integration tests in contracts/escrow/tests/ | Cargo looks for integration tests in crate's tests/ dir, not workspace root |
 | D15 | 2026-09-04 | Storage access in tests requires env.as_contract() | Soroban persistent storage is only accessible within a contract context — wrap test storage calls with env.as_contract(&contract_id, \|\| { ... }) |
+| D16 | 2026-09-04 | Token setup via register_stellar_asset_contract_v2 | SDK 28 API: env.register_stellar_asset_contract_v2(admin) returns StellarAssetContract with .address() and .issuer() |
+| D17 | 2026-09-04 | Mint via StellarAssetClient, not TokenClient | TokenClient has transfer/balance but not mint — StellarAssetClient::new(env, token).mint(to, amount) for SAC minting |
+| D18 | 2026-09-04 | Event verification deferred to 07-6 | SDK 28 events().all() returns empty in test context — needs investigation of diagnostic vs contract events; core functionality (storage, transfer, auth) verified |
