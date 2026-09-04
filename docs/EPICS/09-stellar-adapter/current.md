@@ -3,7 +3,7 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 09-2
+**Active slice:** 09-3
 **Last updated:** 2026-09-04
 
 ## Slice Progress
@@ -12,7 +12,7 @@
 |-------|--------|-------|
 | 09-1 | ✅ Done | Scaffold + connection + wallet — 12 tests pass |
 | 09-2 | ✅ Done | create implementation — 6 tests pass, build passes |
-| 09-3 | Pending | release + refund implementation (2h) |
+| 09-3 | ✅ Done | release + refund implementation — 7 tests pass, build passes |
 | 09-4 | Pending | list + get — contract storage iteration (1.5h) |
 | 09-5 | Pending | Event parsing + subscribeEvents polling (1.5h) |
 | 09-6 | Pending | Integration tests on local network (2.5h) |
@@ -20,30 +20,30 @@
 ## What's done
 
 ### SLICE-09-1: Scaffold + connection + wallet
-- `fe/src/adapters/stellar/connection.ts` — RPC server creation, contract ID lookup, ABI loading, keypair utils
-- `fe/src/adapters/stellar/index.ts` — `StellarEscrowAdapter` class implementing `EscrowAdapter` interface
+- `fe/src/adapters/stellar/connection.ts` — RPC server, contract ID, ABI, keypair utils
+- `fe/src/adapters/stellar/index.ts` — `StellarEscrowAdapter` class
 - `fe/src/adapters/stellar/__tests__/scaffold.test.ts` — 12 tests
-- `@stellar/stellar-sdk` installed, `allowHttp: true` for local network
 
 ### SLICE-09-2: create implementation
-- `fe/src/adapters/stellar/create.ts` — `createEscrowTransaction` function
-  - Builds contract call operation via `Contract.call("create_escrow", ...)`
-  - Simulates transaction, prepares with footprint + auth
-  - Signs with keypair (integration tests) or expects Freighter signing (production)
-  - Sends transaction, polls for confirmation
-  - Extracts escrow nonce (u64) from `TransactionMeta` return value via `scValToNative`
-- `fe/src/adapters/stellar/index.ts` — wired `createEscrow` to use `createEscrowTransaction`
-- `fe/src/adapters/stellar/__tests__/create.test.ts` — 6 tests (mock SDK)
-  - Sends transaction and returns escrowId + txHash
-  - Calls simulate → prepare → send in order
-  - Throws on simulation error
-  - Uses walletAddress as fallback resolver
-- `fe/src/adapters/stellar/__tests__/scaffold.test.ts` — removed createEscrow stub check
-- `npm run build` passes, `vitest` 18/18 pass (12 scaffold + 6 create)
+- `fe/src/adapters/stellar/create.ts` — `createEscrowTransaction`: simulate, prepare, sign, send, poll, extract nonce
+- `fe/src/adapters/stellar/__tests__/create.test.ts` — 6 tests
+
+### SLICE-09-3: release + refund implementation
+- `fe/src/adapters/stellar/tx.ts` — shared `submitContractCall` helper (simulate → prepare → sign → send → poll)
+  - Extracted common transaction submission logic from create.ts
+  - `extractReturnValue` for parsing Soroban return values
+- `fe/src/adapters/stellar/release.ts` — `releaseEscrowTransaction`: calls `release_escrow(caller, nonce)`
+- `fe/src/adapters/stellar/refund.ts` — `refundEscrowTransaction`: calls `refund_escrow(caller, nonce)`
+- `fe/src/adapters/stellar/index.ts` — wired `releaseEscrow` and `refundEscrow`
+- `fe/src/adapters/stellar/__tests__/release-refund.test.ts` — 7 tests (mock SDK)
+  - release: returns txHash, calls simulate→prepare→send, throws on sim error, throws on send ERROR
+  - refund: returns txHash, calls simulate→prepare→send, throws on sim error
+- `fe/src/adapters/stellar/__tests__/scaffold.test.ts` — removed release/refund stub checks
+- `npm run build` passes, `vitest` 25/25 pass (12 scaffold + 6 create + 7 release/refund)
 
 ## What's next
 
-SLICE-09-3: `releaseEscrow` + `refundEscrow` implementation.
+SLICE-09-4: `getEscrow` + `listEscrowsByUser` — contract storage iteration.
 
 ## Open questions
 

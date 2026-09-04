@@ -22,3 +22,5 @@
 | D16 | 2026-09-04 | `prepareTransaction` without simulated arg | SDK 13.x signature: `prepareTransaction(tx, useUpgradedAuth?)` — handles simulation internally |
 | D17 | 2026-09-04 | Extract nonce from `TransactionMeta.v3().sorobanMeta().returnValue()` | Soroban return value in meta, not in `returnValue` field of GetTransactionResponse |
 | D18 | 2026-09-04 | Sign after `prepareTransaction` | Footprint + auth added by prepare; signing must happen after |
+| D19 | 2026-09-04 | Shared `submitContractCall` in `tx.ts` | All contract methods share simulate→prepare→sign→send→poll flow; DRY |
+| D20 | 2026-09-04 | `release_escrow` and `refund_escrow` take `(caller: Address, nonce: u64)` | Matches EPIC-07 contract ABI; caller must be beneficiary/resolver for release, depositor for refund |
