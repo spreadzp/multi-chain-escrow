@@ -22,4 +22,8 @@ impl Escrow {
     ) -> u64 {
         functions::create_escrow(env, depositor, beneficiary, resolver, token, amount)
     }
+
+    pub fn release_escrow(env: Env, caller: Address, nonce: u64) {
+        functions::release_escrow(env, caller, nonce)
+    }
 }

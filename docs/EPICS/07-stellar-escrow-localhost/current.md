@@ -13,7 +13,7 @@
 | 07-1 | ✅ Done | Soroban project setup — workspace, Cargo.toml, lib.rs scaffold, soroban contract build passes |
 | 07-2 | ✅ Done | Escrow data structure — types.rs with EscrowData, EscrowStatus, DataKey; store/retrieve test passes |
 | 07-3 | ✅ Done | Create function — create_escrow with auth, SAC transfer, storage, nonce, event; 4 tests pass |
-| 07-4 | Pending | Release function |
+| 07-4 | ✅ Done | Release function — release_escrow with role check, SAC transfer to beneficiary, status update; 8 tests pass |
 | 07-5 | Pending | Refund function |
 | 07-6 | Pending | Tests + test SAC token |
 | 07-7 | Pending | Deploy + ABI export + frontend types |
@@ -46,9 +46,16 @@
 - Tests: create_escrow happy path (storage + token balance + counter), zero amount panic, store/retrieve, status variants (4 tests, all pass)
 - WASM: 2270 bytes, 1 exported function
 
+### SLICE-07-4: Release function
+- `blockchains/stellar/contracts/escrow/src/functions/release.rs` — new
+- `functions/mod.rs` — updated (re-export release_escrow)
+- `lib.rs` — updated (release_escrow in #[contractimpl])
+- `release_escrow`: caller.require_auth(), load escrow, validate status==Created, validate caller==beneficiary||resolver, TokenClient transfer to beneficiary, set status Released, emit Released event
+- Tests: release by beneficiary, release by resolver, unauthorized caller panic, double-release panic (4 new tests, 8 total)
+
 ## What's next
 
-SLICE-07-4 (Release) and SLICE-07-5 (Refund) — parallel after 07-3.
+SLICE-07-5 (Refund function) — parallel with 07-4, similar pattern.
 
 ## Open questions
 

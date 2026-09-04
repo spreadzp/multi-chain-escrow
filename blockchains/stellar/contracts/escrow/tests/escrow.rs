@@ -67,6 +67,114 @@ fn test_create_escrow() {
 }
 
 #[test]
+fn test_release_escrow() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let token = setup_token(&env, &admin);
+
+    let depositor = Address::generate(&env);
+    let beneficiary = Address::generate(&env);
+    let resolver = Address::generate(&env);
+
+    let amount: i128 = 1_000_000;
+    mint_token(&env, &token, &depositor, amount);
+
+    let contract_id = env.register(escrow::Escrow, ());
+    let client = escrow::EscrowClient::new(&env, &contract_id);
+
+    let nonce = client.create_escrow(&depositor, &beneficiary, &resolver, &token, &amount);
+    assert_eq!(nonce, 0);
+
+    client.release_escrow(&beneficiary, &nonce);
+
+    env.as_contract(&contract_id, || {
+        let data: EscrowData = env.storage().persistent().get(&escrow::DataKey::Escrow(0)).unwrap();
+        assert_eq!(data.status, EscrowStatus::Released);
+    });
+
+    let token_client = TokenClient::new(&env, &token);
+    assert_eq!(token_client.balance(&contract_id), 0);
+    assert_eq!(token_client.balance(&beneficiary), amount);
+}
+
+#[test]
+fn test_release_escrow_by_resolver() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let token = setup_token(&env, &admin);
+
+    let depositor = Address::generate(&env);
+    let beneficiary = Address::generate(&env);
+    let resolver = Address::generate(&env);
+
+    let amount: i128 = 500_000;
+    mint_token(&env, &token, &depositor, amount);
+
+    let contract_id = env.register(escrow::Escrow, ());
+    let client = escrow::EscrowClient::new(&env, &contract_id);
+
+    let nonce = client.create_escrow(&depositor, &beneficiary, &resolver, &token, &amount);
+
+    client.release_escrow(&resolver, &nonce);
+
+    let token_client = TokenClient::new(&env, &token);
+    assert_eq!(token_client.balance(&beneficiary), amount);
+}
+
+#[test]
+#[should_panic(expected = "caller must be beneficiary or resolver")]
+fn test_release_escrow_unauthorized() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let token = setup_token(&env, &admin);
+
+    let depositor = Address::generate(&env);
+    let beneficiary = Address::generate(&env);
+    let resolver = Address::generate(&env);
+    let attacker = Address::generate(&env);
+
+    let amount: i128 = 1_000_000;
+    mint_token(&env, &token, &depositor, amount);
+
+    let contract_id = env.register(escrow::Escrow, ());
+    let client = escrow::EscrowClient::new(&env, &contract_id);
+
+    let nonce = client.create_escrow(&depositor, &beneficiary, &resolver, &token, &amount);
+
+    client.release_escrow(&attacker, &nonce);
+}
+
+#[test]
+#[should_panic(expected = "escrow must be in Created status")]
+fn test_release_escrow_already_released() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let token = setup_token(&env, &admin);
+
+    let depositor = Address::generate(&env);
+    let beneficiary = Address::generate(&env);
+    let resolver = Address::generate(&env);
+
+    let amount: i128 = 1_000_000;
+    mint_token(&env, &token, &depositor, amount);
+
+    let contract_id = env.register(escrow::Escrow, ());
+    let client = escrow::EscrowClient::new(&env, &contract_id);
+
+    let nonce = client.create_escrow(&depositor, &beneficiary, &resolver, &token, &amount);
+    client.release_escrow(&beneficiary, &nonce);
+    client.release_escrow(&beneficiary, &nonce);
+}
+
+#[test]
 #[should_panic(expected = "amount must be positive")]
 fn test_create_escrow_zero_amount() {
     let env = Env::default();
