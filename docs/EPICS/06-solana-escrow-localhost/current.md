@@ -3,7 +3,7 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 06-4 (next)
+**Active slice:** 06-6 (next)
 **Last updated:** 2026-09-04
 
 ## Slice Progress
@@ -13,7 +13,7 @@
 | 06-1 | ✅ Done | Anchor project setup — workspace, Cargo.toml, lib.rs scaffold, anchor build passes |
 | 06-2 | ✅ Done | Escrow account struct — state.rs with EscrowAccount, EscrowStatus, PDA seeds |
 | 06-3 | ✅ Done | Create instruction — PDA init + SPL transfer + DepositedEvent |
-| 06-4 | Pending | Release instruction |
+| 06-4 | ✅ Done | Release instruction — PDA-signed CPI transfer to beneficiary + ReleasedEvent |
 | 06-5 | ✅ Done | Refund instruction — PDA-signed CPI transfer back to depositor + RefundedEvent |
 | 06-6 | Pending | Tests + test SPL mint |
 | 06-7 | Pending | Deploy + IDL export + frontend types |
@@ -39,36 +39,34 @@
 - `EscrowStatus` enum: Created, Released, Refunded
 - `SEED_PREFIX = b"escrow"`, `pda_seeds()` and `signer_seeds()` helpers
 - `#[derive(InitSpace)]` for automatic space calculation
-- `anchor build` compiles successfully
 
 ### SLICE-06-3: Create instruction (PDA + SPL deposit)
 
 - `blockchains/solana/programs/escrow/src/instructions/create.rs` — new
-- `blockchains/solana/programs/escrow/src/instructions/mod.rs` — new
-- `CreateEscrow` accounts struct: depositor (signer), mint, depositor_ata, escrow_pda (init), escrow_ata (init), token_program, associated_token_program, system_program, rent
-- `create_escrow` instruction: validates amount > 0, inits PDA with all fields, CPI token::transfer from depositor ATA to escrow ATA, emits DepositedEvent
-- `DepositedEvent` with #[event] derive
-- `EscrowError::InvalidAmount` error code
-- `lib.rs` updated: `pub use instructions::create::*; pub use state::*;`, create_escrow in #[program]
-- Cargo.toml: `idl-build` feature enables both `anchor-lang/idl-build` and `anchor-spl/idl-build`
-- `anchor build` compiles cleanly
+- `CreateEscrow` accounts: depositor (signer), mint, depositor_ata, escrow_pda (init), escrow_ata (init), token_program, ATA program, system_program, rent
+- `create_escrow`: validates amount > 0, inits PDA, CPI token::transfer, emits DepositedEvent
+- `DepositedEvent`, `EscrowError::InvalidAmount`
+
+### SLICE-06-4: Release instruction
+
+- `blockchains/solana/programs/escrow/src/instructions/release.rs` — new
+- `ReleaseEscrow` accounts: signer (beneficiary or resolver), escrow_pda (seeds + constraint), mint, escrow_ata, beneficiary_ata, token_program
+- `release_escrow`: validates status==Created, validates signer==beneficiary||signer==resolver, CPI token::transfer from escrow ATA to beneficiary ATA (PDA signs), sets status to Released, emits ReleasedEvent
+- `ReleasedEvent` with #[event] derive
+- `ReleaseError::NotCreated`, `ReleaseError::NotAuthorized`
+- beneficiary_ata uses `associated_token::authority = escrow_pda.beneficiary` (derives from escrow state)
+- Same borrow pattern as refund: immutable for CPI, mutable for status update
 
 ### SLICE-06-5: Refund instruction
 
 - `blockchains/solana/programs/escrow/src/instructions/refund.rs` — new
-- `RefundEscrow` accounts struct: signer (depositor), escrow_pda (seeds verified, constraint depositor==signer), mint, escrow_ata, depositor_ata, token_program
-- `refund_escrow` instruction: validates status==Created, validates signer==depositor, CPI token::transfer from escrow ATA to depositor ATA (PDA signs via signer_seeds), sets status to Refunded, emits RefundedEvent
-- `RefundedEvent` with #[event] derive
-- `RefundError::NotCreated`, `RefundError::NotDepositor` error codes
-- `instructions/mod.rs` updated: added `pub mod refund;`
-- `lib.rs` updated: `pub use instructions::refund::*;`, refund_escrow in #[program]
-- PDA seeds verified via Anchor `seeds` constraint using escrow_pda account fields
-- Borrow fix: immutable borrow for validation/CPI, then mutable borrow for status update
-- `anchor build` compiles cleanly
+- `RefundEscrow` accounts: signer (depositor), escrow_pda (seeds + constraint), mint, escrow_ata, depositor_ata, token_program
+- `refund_escrow`: validates status==Created, validates signer==depositor, CPI token::transfer from escrow ATA to depositor ATA (PDA signs), sets status to Refunded, emits RefundedEvent
+- `RefundedEvent`, `RefundError::NotCreated`, `RefundError::NotDepositor`
 
 ## What's next
 
-SLICE-06-4 (Release instruction) — transfer tokens to beneficiary, then SLICE-06-6 (Tests).
+SLICE-06-6 (Tests + test SPL mint) — Anchor test suite with mint setup, happy paths for create/release/refund, role denial tests.
 
 ## Open questions
 

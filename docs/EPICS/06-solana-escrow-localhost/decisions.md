@@ -23,3 +23,6 @@
 | D17 | 2026-09-04 | escrow_ata uses init not init_if_needed | New escrow always creates new ATA — init_if_needed requires cargo feature and is unnecessary here |
 | D18 | 2026-09-04 | Refund uses constraint not has_one for depositor check | has_one requires matching field name in Accounts struct — constraint is more flexible when account field name differs (signer vs depositor) |
 | D19 | 2026-09-04 | Refund: immutable borrow for CPI, then mutable for status | Rust borrow checker E0502: can't borrow escrow_pda as mutable and immutable simultaneously — split into two phases |
+| D20 | 2026-09-04 | Release: beneficiary_ata authority = escrow_pda.beneficiary | ATA derived from escrow state field, not signer — allows any authorized signer (beneficiary or resolver) to release |
+| D21 | 2026-09-04 | Release: constraint allows beneficiary OR resolver | `signer == beneficiary || signer == resolver` — both roles can trigger release |
+| D22 | 2026-09-04 | Keep escrow ATA open after release/refund | Audit trail — rent reclaim via close can be added later if needed |

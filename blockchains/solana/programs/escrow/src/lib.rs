@@ -4,6 +4,7 @@ pub mod instructions;
 pub mod state;
 
 pub use instructions::create::*;
+pub use instructions::release::*;
 pub use instructions::refund::*;
 pub use state::*;
 
@@ -25,5 +26,9 @@ pub mod escrow {
 
     pub fn refund_escrow(ctx: Context<RefundEscrow>) -> Result<()> {
         instructions::refund::refund_escrow(ctx)
+    }
+
+    pub fn release_escrow(ctx: Context<ReleaseEscrow>) -> Result<()> {
+        instructions::release::release_escrow(ctx)
     }
 }
