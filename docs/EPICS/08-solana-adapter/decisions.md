@@ -21,3 +21,4 @@
 | D15 | 2026-09-04 | `program.methods` cast to `any` | TS2589 deep type instantiation with `Program<any>` on method calls |
 | D16 | 2026-09-04 | Nonce = `new BN(Date.now())` | Timestamp-based for uniqueness; passed as both BN (instruction arg) and BigInt (PDA seed) |
 | D17 | 2026-09-04 | `@vitest-environment node` for crypto tests | jsdom lacks Buffer/crypto globals needed by `findProgramAddressSync` and `getAssociatedTokenAddressSync` |
+| D18 | 2026-09-04 | `getMintFromEscrow` fetches mint from on-chain account | release/refund need mint for ATA derivation; fetch from escrowAccount via `program.account.escrowAccount.fetch` |

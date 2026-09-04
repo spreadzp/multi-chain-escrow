@@ -12,7 +12,7 @@
 |-------|--------|-------|
 | 08-1 | ✅ Done | Scaffold + connection + wallet + IDL load; 10 tests pass |
 | 08-2 | ✅ Done | createEscrow — PDA derivation, ATA, instruction builder; 8 tests pass |
-| 08-3 | Pending | releaseEscrow + refundEscrow |
+| 08-3 | ✅ Done | releaseEscrow + refundEscrow — instruction builders, mint fetch, 8 tests pass |
 | 08-4 | Pending | listEscrowsByUser + getEscrow (getProgramAccounts) |
 | 08-5 | Pending | Event parsing + subscribeEvents (polling) |
 | 08-6 | Pending | Integration tests on local validator |
@@ -37,9 +37,17 @@
 - Tests use `// @vitest-environment node` for Buffer/crypto globals
 - `npm run build` passes, `vitest` 19/19 pass (11 scaffold + 8 create)
 
+### SLICE-08-3: releaseEscrow + refundEscrow
+- `fe/src/adapters/solana/release.ts` — `releaseEscrowInstruction` (signer, escrowPda, mint → tx)
+- `fe/src/adapters/solana/refund.ts` — `refundEscrowInstruction` (signer, escrowPda, mint → tx)
+- `index.ts` — `releaseEscrow`/`refundEscrow` fetch mint from on-chain escrow account, then call instruction
+- `getMintFromEscrow` helper — fetches `escrowAccount` by PDA, extracts mint field
+- `fe/src/adapters/solana/__tests__/release-refund.test.ts` — 8 tests
+- `npm run build` passes, `vitest` 27/27 pass
+
 ## What's next
 
-SLICE-08-3 (releaseEscrow + refundEscrow) — send release_escrow and refund_escrow instructions.
+SLICE-08-4 (listEscrowsByUser + getEscrow) — read PDA accounts via `getProgramAccounts` with memcmp filter.
 
 ## Open questions
 
