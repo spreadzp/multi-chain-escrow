@@ -13,7 +13,7 @@
 | 08-1 | ✅ Done | Scaffold + connection + wallet + IDL load; 10 tests pass |
 | 08-2 | ✅ Done | createEscrow — PDA derivation, ATA, instruction builder; 8 tests pass |
 | 08-3 | ✅ Done | releaseEscrow + refundEscrow — instruction builders, mint fetch, 8 tests pass |
-| 08-4 | Pending | listEscrowsByUser + getEscrow (getProgramAccounts) |
+| 08-4 | ✅ Done | getEscrow + listEscrowsByUser — account mapping, memcmp filter, 9 tests pass |
 | 08-5 | Pending | Event parsing + subscribeEvents (polling) |
 | 08-6 | Pending | Integration tests on local validator |
 
@@ -45,9 +45,18 @@
 - `fe/src/adapters/solana/__tests__/release-refund.test.ts` — 8 tests
 - `npm run build` passes, `vitest` 27/27 pass
 
+### SLICE-08-4: getEscrow + listEscrowsByUser
+- `fe/src/adapters/solana/query.ts` — `mapEscrowAccount`, `fetchEscrowAccount`, `listEscrowAccountsByUser`
+- Account layout: discriminator(8) + depositor(32) + beneficiary(32) + resolver(32) + mint(32) + amount(8) + status(1) + nonce(8) + bump(1) + created_at(8) + tx_hash_deposit(32)
+- `getEscrow`: fetches single account via `program.account.escrowAccount.fetch`, returns null on error
+- `listEscrowsByUser`: `getProgramAccounts` with memcmp filter at offset 8 (depositor field)
+- `mapEscrowAccount`: maps raw on-chain data to `Escrow` interface, converts status enum to string
+- `fe/src/adapters/solana/__tests__/query.test.ts` — 9 tests
+- `npm run build` passes, `vitest` 36/36 pass
+
 ## What's next
 
-SLICE-08-4 (listEscrowsByUser + getEscrow) — read PDA accounts via `getProgramAccounts` with memcmp filter.
+SLICE-08-5 (subscribeEvents) — parse on-chain logs for Deposited/Released/Refunded events.
 
 ## Open questions
 

@@ -22,3 +22,5 @@
 | D16 | 2026-09-04 | Nonce = `new BN(Date.now())` | Timestamp-based for uniqueness; passed as both BN (instruction arg) and BigInt (PDA seed) |
 | D17 | 2026-09-04 | `@vitest-environment node` for crypto tests | jsdom lacks Buffer/crypto globals needed by `findProgramAddressSync` and `getAssociatedTokenAddressSync` |
 | D18 | 2026-09-04 | `getMintFromEscrow` fetches mint from on-chain account | release/refund need mint for ATA derivation; fetch from escrowAccount via `program.account.escrowAccount.fetch` |
+| D19 | 2026-09-04 | Depositor at offset 8 for memcmp | 8-byte discriminator + 32-byte depositor pubkey; `getProgramAccounts` filter |
+| D20 | 2026-09-04 | `fetchEscrowAccount` returns null on error | Graceful handling for non-existent accounts; catch block returns null |
