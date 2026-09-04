@@ -3,7 +3,7 @@
 ## Status
 
 **Phase:** In Progress
-**Active slice:** 06-6 (next)
+**Active slice:** 06-7 (next)
 **Last updated:** 2026-09-04
 
 ## Slice Progress
@@ -15,13 +15,12 @@
 | 06-3 | ✅ Done | Create instruction — PDA init + SPL transfer + DepositedEvent |
 | 06-4 | ✅ Done | Release instruction — PDA-signed CPI transfer to beneficiary + ReleasedEvent |
 | 06-5 | ✅ Done | Refund instruction — PDA-signed CPI transfer back to depositor + RefundedEvent |
-| 06-6 | Pending | Tests + test SPL mint |
+| 06-6 | ✅ Done | Anchor test suite — 10 tests passing (create, release, refund, role denial, status transitions, events) |
 | 06-7 | Pending | Deploy + IDL export + frontend types |
 
 ## What's done
 
 ### SLICE-06-1: Anchor project setup
-
 - `blockchains/solana/Anchor.toml` — new (localnet, deployer wallet, program ID)
 - `blockchains/solana/Cargo.toml` — new (workspace root, members: programs/escrow)
 - `blockchains/solana/programs/escrow/Cargo.toml` — new (anchor-lang 0.31.1, anchor-spl 0.31.1)
@@ -33,7 +32,6 @@
 - `anchor build` compiles successfully
 
 ### SLICE-06-2: Escrow account struct
-
 - `blockchains/solana/programs/escrow/src/state.rs` — new
 - `EscrowAccount` struct with fields: depositor, beneficiary, resolver, mint, amount, status, nonce, bump, created_at, tx_hash_deposit
 - `EscrowStatus` enum: Created, Released, Refunded
@@ -41,14 +39,12 @@
 - `#[derive(InitSpace)]` for automatic space calculation
 
 ### SLICE-06-3: Create instruction (PDA + SPL deposit)
-
 - `blockchains/solana/programs/escrow/src/instructions/create.rs` — new
 - `CreateEscrow` accounts: depositor (signer), mint, depositor_ata, escrow_pda (init), escrow_ata (init), token_program, ATA program, system_program, rent
 - `create_escrow`: validates amount > 0, inits PDA, CPI token::transfer, emits DepositedEvent
 - `DepositedEvent`, `EscrowError::InvalidAmount`
 
 ### SLICE-06-4: Release instruction
-
 - `blockchains/solana/programs/escrow/src/instructions/release.rs` — new
 - `ReleaseEscrow` accounts: signer (beneficiary or resolver), escrow_pda (seeds + constraint), mint, escrow_ata, beneficiary_ata, token_program
 - `release_escrow`: validates status==Created, validates signer==beneficiary||signer==resolver, CPI token::transfer from escrow ATA to beneficiary ATA (PDA signs), sets status to Released, emits ReleasedEvent
@@ -58,15 +54,25 @@
 - Same borrow pattern as refund: immutable for CPI, mutable for status update
 
 ### SLICE-06-5: Refund instruction
-
 - `blockchains/solana/programs/escrow/src/instructions/refund.rs` — new
 - `RefundEscrow` accounts: signer (depositor), escrow_pda (seeds + constraint), mint, escrow_ata, depositor_ata, token_program
 - `refund_escrow`: validates status==Created, validates signer==depositor, CPI token::transfer from escrow ATA to depositor ATA (PDA signs), sets status to Refunded, emits RefundedEvent
 - `RefundedEvent`, `RefundError::NotCreated`, `RefundError::NotDepositor`
 
+### SLICE-06-6: Anchor test suite
+- `blockchains/solana/tests/escrow.ts` — comprehensive test suite (10 tests, all passing)
+- Test coverage:
+  - create_escrow: happy path (PDA, tokens, status), amount=0 rejection
+  - release_escrow: beneficiary release, resolver release, unauthorized rejection, double release rejection
+  - refund_escrow: happy path, non-depositor rejection, refund on Released rejection, release on Refunded rejection
+  - Event verification: ReleasedEvent and RefundedEvent confirmed via "Program data:" log entries
+- Test infrastructure: SPL mint creation, ATAs for all roles, helper functions (findEscrowPda, getTokenBalance, createEscrow, deriveEscrowAta)
+- Validator setup: `--clone-feature-set` from mainnet to enable SBPF v2 feature gates
+- Graphify indexed: 132 nodes, 161 edges, 13 communities
+
 ## What's next
 
-SLICE-06-6 (Tests + test SPL mint) — Anchor test suite with mint setup, happy paths for create/release/refund, role denial tests.
+SLICE-06-7 (Deploy + IDL export + frontend types) — deploy to local validator, copy IDL, update frontend config.
 
 ## Open questions
 
@@ -83,4 +89,4 @@ SLICE-06-6 (Tests + test SPL mint) — Anchor test suite with mint setup, happy 
 - Instructions: one file per instruction (create.rs, release.rs, refund.rs)
 - Anchor.toml added to Key Files
 - 06-4 and 06-5 parallel after 06-3
-- Graphify: `cd fe && graphify update .` after each slice
+- Graphify: `cd blockchains/solana && graphify update .` after each slice

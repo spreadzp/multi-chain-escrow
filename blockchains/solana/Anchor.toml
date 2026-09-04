@@ -13,7 +13,7 @@ url = "https://api.devnet.solana.com"
 
 [provider]
 cluster = "localnet"
-wallet = ".local-keys/deployer.json"
+wallet = "/home/dev/Documents/My/Interview/stellar-solana-interview/blockchains/solana/.local-keys/deployer-anchor.json"
 
 [scripts]
 test = "npx ts-mocha -t 1000000 tests/**/*.ts"

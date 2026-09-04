@@ -7,7 +7,8 @@
     "lint:fix": "prettier */**/*.ts --write"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.31.1"
+    "@coral-xyz/anchor": "^0.31.1",
+    "@solana/spl-token": "^0.4.15"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.6",

@@ -26,3 +26,8 @@
 | D20 | 2026-09-04 | Release: beneficiary_ata authority = escrow_pda.beneficiary | ATA derived from escrow state field, not signer — allows any authorized signer (beneficiary or resolver) to release |
 | D21 | 2026-09-04 | Release: constraint allows beneficiary OR resolver | `signer == beneficiary || signer == resolver` — both roles can trigger release |
 | D22 | 2026-09-04 | Keep escrow ATA open after release/refund | Audit trail — rent reclaim via close can be added later if needed |
+| D23 | 2026-09-04 | Validator needs --clone-feature-set for SBPF v2 | solana-program v2.3.0 (via anchor-lang 0.31.1) emits SBPF v2 bytecode — test-validator 4.2.2 needs feature gates from mainnet to accept it |
+| D24 | 2026-09-04 | Derive escrow ATA address, don't pre-create | Program's `init` constraint creates the ATA — pre-creating with getOrCreateAssociatedTokenAccount causes "Provided owner is not allowed" error |
+| D25 | 2026-09-04 | Read token balance via getAccountInfo raw bytes | getTokenAccountBalance fails on empty/non-existent accounts — getAccountInfo + readBigUInt64LE(64) is more robust |
+| D26 | 2026-09-04 | Separate confirmed connection for getTransaction | Provider defaults to "processed" commitment but getTransaction requires "confirmed" — created second Connection object |
+| D27 | 2026-09-04 | Event verification via "Program data:" log prefix | Anchor events are base64-encoded in "Program data:" log lines — event name not visible as literal text |
