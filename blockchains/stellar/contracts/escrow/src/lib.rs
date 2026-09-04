@@ -26,4 +26,8 @@ impl Escrow {
     pub fn release_escrow(env: Env, caller: Address, nonce: u64) {
         functions::release_escrow(env, caller, nonce)
     }
+
+    pub fn refund_escrow(env: Env, caller: Address, nonce: u64) {
+        functions::refund_escrow(env, caller, nonce)
+    }
 }

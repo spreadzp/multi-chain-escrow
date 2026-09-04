@@ -14,7 +14,7 @@
 | 07-2 | ✅ Done | Escrow data structure — types.rs with EscrowData, EscrowStatus, DataKey; store/retrieve test passes |
 | 07-3 | ✅ Done | Create function — create_escrow with auth, SAC transfer, storage, nonce, event; 4 tests pass |
 | 07-4 | ✅ Done | Release function — release_escrow with role check, SAC transfer to beneficiary, status update; 8 tests pass |
-| 07-5 | Pending | Refund function |
+| 07-5 | ✅ Done | Refund function — refund_escrow with depositor check, SAC transfer back, status update; 11 tests pass |
 | 07-6 | Pending | Tests + test SAC token |
 | 07-7 | Pending | Deploy + ABI export + frontend types |
 
@@ -53,9 +53,17 @@
 - `release_escrow`: caller.require_auth(), load escrow, validate status==Created, validate caller==beneficiary||resolver, TokenClient transfer to beneficiary, set status Released, emit Released event
 - Tests: release by beneficiary, release by resolver, unauthorized caller panic, double-release panic (4 new tests, 8 total)
 
+### SLICE-07-5: Refund function
+- `blockchains/stellar/contracts/escrow/src/functions/refund.rs` — new
+- `functions/mod.rs` — updated (re-export refund_escrow)
+- `lib.rs` — updated (refund_escrow in #[contractimpl])
+- `refund_escrow`: caller.require_auth(), load escrow, validate status==Created, validate caller==depositor, TokenClient transfer back to depositor, set status Refunded, emit Refunded event
+- Tests: refund happy path, unauthorized caller panic, refund after release panic (3 new tests, 11 total)
+- WASM: 3 exported functions (create_escrow, release_escrow, refund_escrow)
+
 ## What's next
 
-SLICE-07-5 (Refund function) — parallel with 07-4, similar pattern.
+SLICE-07-6 (Tests + test SAC token) — comprehensive test suite, edge cases, event verification.
 
 ## Open questions
 
