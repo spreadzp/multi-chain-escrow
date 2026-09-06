@@ -8,6 +8,9 @@ skip-lint = false
 [programs.localnet]
 escrow = "BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj"
 
+[programs.devnet]
+escrow = "BhuNTxtQt8StnXgsqNwJmj8EJTC171g213RzG2U8Z8Cj"
+
 [registry]
 url = "https://api.devnet.solana.com"
 

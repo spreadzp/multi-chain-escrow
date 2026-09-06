@@ -10,6 +10,8 @@
     "chain:solana:stop": "bash blockchains/solana/scripts/stop-validator.sh",
     "chain:solana:faucet": "npx tsx blockchains/solana/scripts/faucet.ts",
     "chain:solana:deploy": "cd blockchains/solana && anchor deploy",
+    "chain:solana:deploy:devnet": "bash blockchains/solana/scripts/deploy-devnet.sh",
+    "chain:solana:mint:devnet": "npx tsx blockchains/solana/scripts/create-devnet-mint.ts",
     "chain:health": "npx tsx blockchains/scripts/health-check.ts"
   },
   "dependencies": {
