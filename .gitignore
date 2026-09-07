@@ -26,8 +26,12 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Docs (tracked separately or in fe/ repo)
+# Docs
 docs/
-
-# Frontend (has its own git repo)
-fe/
+.impeccable/
+.windsurf/
+blockchains/solana/.anchor/
+blockchains/solana/target/
+blockchains/stellar/target/
+blockchains/stellar/contracts/escrow/test_snapshots/
+test-ledger/

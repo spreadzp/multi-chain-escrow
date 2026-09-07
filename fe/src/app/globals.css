@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+:root {
+  /* Light premium theme (primary) */
+  --bg: #f8f9fb;
+  --surface-1: #ffffff;
+  --surface-2: #f4f4f6;
+  --surface-3: #e9e9ec;
+  --border: #e4e4e7;
+  --border-strong: #d1d1d6;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-tertiary: #9ca3af;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-muted: #e0e7ff;
+  --accent-foreground: #ffffff;
+  --success: #059669;
+  --success-muted: #d1fae5;
+  --warning: #d97706;
+  --warning-muted: #fef3c7;
+  --danger: #dc2626;
+  --danger-muted: #fee2e2;
+  --info: #2563eb;
+
+  /* Legacy aliases for backward compat */
+  --background: var(--bg);
+  --foreground: var(--text-primary);
+  --surface: var(--surface-1);
+  --surface-hover: var(--surface-3);
+  --surface-border: var(--border);
+  --muted: var(--text-tertiary);
+  --muted-foreground: var(--text-secondary);
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadows — soft, layered for premium light feel */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --shadow-2: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-3: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 0 2px var(--accent-muted), 0 0 12px rgba(99, 102, 241, 0.15);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark {
+  --bg: #0a0a0b;
+  --surface-1: #131316;
+  --surface-2: #1a1a1f;
+  --surface-3: #222229;
+  --border: #2a2a32;
+  --border-strong: #3a3a44;
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+  --accent: #818cf8;
+  --accent-hover: #a5b4fc;
+  --accent-muted: #312e81;
+  --accent-foreground: #ffffff;
+  --success: #34d399;
+  --success-muted: #064e3b;
+  --warning: #fbbf24;
+  --warning-muted: #78350f;
+  --danger: #f87171;
+  --danger-muted: #7f1d1d;
+  --info: #60a5fa;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-2: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-3: 0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 0 1px var(--accent), 0 0 12px rgba(129, 140, 248, 0.3);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-foreground: var(--text-primary);
+  --color-surface: var(--surface-1);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-hover: var(--surface-3);
+  --color-surface-border: var(--border);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-muted: var(--success-muted);
+  --color-warning: var(--warning);
+  --color-warning-muted: var(--warning-muted);
+  --color-danger: var(--danger);
+  --color-danger-muted: var(--danger-muted);
+  --color-info: var(--info);
+  --color-muted: var(--text-tertiary);
+  --color-muted-foreground: var(--text-secondary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-1: var(--shadow-1);
+  --shadow-2: var(--shadow-2);
+  --shadow-3: var(--shadow-3);
+  --shadow-glow: var(--shadow-glow);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--accent-muted);
+  color: var(--text-primary);
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-glow);
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ReactFlow diagram styling */
+.reactflow-container {
+  background: var(--surface-1);
+  overflow: hidden;
+  position: relative;
+}
+
+.reactflow-container .react-flow__node {
+  font-family: var(--font-mono), monospace;
+}
+
+.reactflow-container .react-flow__edge-text {
+  fill: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.reactflow-container .react-flow__edge-textbg {
+  fill: var(--surface-1);
+}
+
+.reactflow-controls .react-flow__controls-button {
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  fill: var(--text-secondary);
+}
+
+.reactflow-controls .react-flow__controls-button:hover {
+  background: var(--surface-2);
+}
+
+.reactflow-minimap {
+  background: var(--surface-1) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+}

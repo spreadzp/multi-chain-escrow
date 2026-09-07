@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_PUBLIC_MOCK_MODE = "true"
+  NEXT_PUBLIC_RPC_SOLANA_DEVNET = "https://api.devnet.solana.com"
+  NEXT_PUBLIC_RPC_STELLAR_TESTNET = "https://soroban-testnet.stellar.org"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

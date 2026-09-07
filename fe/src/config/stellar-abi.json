@@ -1,0 +1,45 @@
+{
+  "name": "escrow",
+  "version": "0.1.0",
+  "contractId": "CA7LUBLVG3QOXHYRZH65R2QODJMNSMZU65TOC2ZRJFWYBCTFQOEMRM44",
+  "network": "testnet",
+  "networkPassphrase": "Test S Network ; September 2015",
+  "wasmHash": "db5ba56c00bb2fb6b70cb544e32b92d6f41cc5acc8a956e51ba2ddf1ba68fd4d",
+  "wasmSize": 4675,
+  "protocolVersion": 28,
+  "functions": [
+    {
+      "name": "create_escrow",
+      "inputs": [
+        { "name": "depositor", "type": "Address" },
+        { "name": "beneficiary", "type": "Address" },
+        { "name": "resolver", "type": "Address" },
+        { "name": "token", "type": "Address" },
+        { "name": "amount", "type": "i128" }
+      ],
+      "returns": "u32"
+    },
+    {
+      "name": "refund_escrow",
+      "inputs": [
+        { "name": "caller", "type": "Address" },
+        { "name": "nonce", "type": "u32" }
+      ],
+      "returns": "void"
+    },
+    {
+      "name": "release_escrow",
+      "inputs": [
+        { "name": "caller", "type": "Address" },
+        { "name": "nonce", "type": "u32" }
+      ],
+      "returns": "void"
+    }
+  ],
+  "events": [
+    { "name": "Deposited", "args": ["u32", "Address", "Address", "i128"] },
+    { "name": "Released", "args": ["u32", "Address", "i128"] },
+    { "name": "Refunded", "args": ["u32", "Address", "i128"] }
+  ],
+  "xdr_base64": "AAAAAAAAAAAAAAANY3JlYXRlX2VzY3JvdwAAAAAAAAUAAAAAAAAACWRlcG9zaXRvcgAAAAAAABMAAAAAAAAAC2JlbmVmaWNpYXJ5AAAAABMAAAAAAAAACHJlc29sdmVyAAAAEwAAAAAAAAAFdG9rZW4AAAAAAAATAAAAAAAAAAZhbW91bnQAAAAAAAsAAAABAAAABgAAAAAAAAAAAAAADXJlZnVuZF9lc2Nyb3cAAAAAAAACAAAAAAAAAAZjYWxsZXIAAAAAABMAAAAAAAAABW5vbmNlAAAAAAAABgAAAAAAAAAAAAAAAAAAAA5yZWxlYXNlX2VzY3JvdwAAAAAAAgAAAAAAAAAGY2FsbGVyAAAAAAATAAAAAAAAAAVub25jZQAAAAAAAAYAAAAA"
+}
