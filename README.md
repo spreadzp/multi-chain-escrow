@@ -167,9 +167,9 @@ classDiagram
     class EscrowAdapter {
         <<interface>>
         +chainId: ChainId
-        +createEscrow(params): Promise~{escrowId, txHash}~
-        +releaseEscrow(escrowId): Promise~{txHash}~
-        +refundEscrow(escrowId): Promise~{txHash}~
+        +createEscrow(params): Promise~EscrowResult~
+        +releaseEscrow(escrowId): Promise~TxResult~
+        +refundEscrow(escrowId): Promise~TxResult~
         +getEscrow(escrowId): Promise~Escrow | null~
         +listEscrowsByUser(address): Promise~Escrow[]~
         +subscribeEvents(onEvent): () => void
