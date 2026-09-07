@@ -27,7 +27,6 @@ Thumbs.db
 .idea/
 
 # Docs
-docs/
 .impeccable/
 .windsurf/
 blockchains/solana/.anchor/
